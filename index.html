@@ -1589,7 +1589,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/02/15/实验文档1：BIND9的安装部署/">
+    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档2：自定义区域/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Stanley Wang">
@@ -1609,7 +1609,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/02/15/实验文档1：BIND9的安装部署/" class="post-title-link" itemprop="url">实验文档1：BIND9的安装部署</a>
+                <a href="/2018/12/16/实验文档2：自定义区域/" class="post-title-link" itemprop="url">实验文档2：自定义正解域</a>
               
             
           </h1>
@@ -1634,7 +1634,7 @@
                 
               
 
-              <time title="创建时间：2018-02-15 10:29:41" itemprop="dateCreated datePublished" datetime="2018-02-15T10:29:41+08:00">2018-02-15</time>
+              <time title="创建时间：2018-12-16 16:12:56" itemprop="dateCreated datePublished" datetime="2018-12-16T16:12:56+08:00">2018-12-16</time>
             
 
             
@@ -1651,7 +1651,285 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-22 15:24:16" itemprop="dateModified" datetime="2019-02-22T15:24:16+08:00">2019-02-22</time>
+                <time title="修改时间：2019-02-22 18:14:54" itemprop="dateModified" datetime="2019-02-22T18:14:54+08:00">2019-02-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Web-DNS技术/" itemprop="url" rel="index"><span itemprop="name">Web DNS技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.8k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">3 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="自定义区域配置文件"><a href="#自定义区域配置文件" class="headerlink" title="自定义区域配置文件"></a>自定义区域配置文件</h1><p>自定义区域的配置范例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;host.com&quot; IN &#123;</span><br><span class="line">        type  master;</span><br><span class="line">        file  &quot;host.com.zone&quot;;</span><br><span class="line">        allow-update &#123; 10.4.7.11;10.4.7.12; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这里自定义了一个host.com的主机域，可以放在/etc/named.rfc1912.zones文件中，也可以放置在自定义的文件中，在/etc/named.conf里include进来</p>
+<blockquote>
+<p>主机域</p>
+<ul>
+<li>主机域和业务域无关，且建议分开</li>
+<li>主机域其实是一个假域，也就是说，主机域其实是不能解析到互联网上的，它只对局域网（内网）提供服务</li>
+</ul>
+</blockquote>
+<h1 id="自定义区域数据库文件"><a href="#自定义区域数据库文件" class="headerlink" title="自定义区域数据库文件"></a>自定义区域数据库文件</h1><ul>
+<li>一般而言是文本文件，且只包含资源记录和宏定义</li>
+<li>需在自定义区域配置文件中指定存放路径，可以绝对路径或相对路径（相对于/var/named目录）</li>
+<li>注意文件的属性（属主、属组及权限）</li>
+</ul>
+<h2 id="配置范例"><a href="#配置范例" class="headerlink" title="配置范例"></a>配置范例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ORIGIN .</span><br><span class="line">$TTL 600	; 10 minutes</span><br><span class="line">host.com			IN SOA	dns.host.com. dnsadmin.host.com. (</span><br><span class="line">				2019020701 ; serial</span><br><span class="line">				10800      ; refresh (3 hours)</span><br><span class="line">				900        ; retry (15 minutes)</span><br><span class="line">				604800     ; expire (1 week)</span><br><span class="line">				86400      ; minimum (1 day)</span><br><span class="line">				)</span><br><span class="line">						NS   ns1.host.com.</span><br><span class="line">$ORIGIN host.com.</span><br><span class="line">$TTL 60	; 1 minute</span><br><span class="line">ns1                        A    10.4.7.11</span><br></pre></td></tr></table></figure>
+<h2 id="资源记录（Resource-Record）"><a href="#资源记录（Resource-Record）" class="headerlink" title="资源记录（Resource Record）"></a>资源记录（Resource Record）</h2><h3 id="资源记录格式"><a href="#资源记录格式" class="headerlink" title="资源记录格式"></a>资源记录格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name [ttl(缓存时间)] IN 资源记录类型（RRtype）  Value</span><br></pre></td></tr></table></figure>
+<h3 id="常用资源记录类型（RR-type）"><a href="#常用资源记录类型（RR-type）" class="headerlink" title="常用资源记录类型（RR-type）"></a>常用资源记录类型（RR-type）</h3><h4 id="SOA记录"><a href="#SOA记录" class="headerlink" title="SOA记录"></a>SOA记录</h4><p>SOA: 起始授权，只能有一条</p>
+<ul>
+<li>name:只能是区域名称，通常可以简写为@，例如：od.com.</li>
+<li>value:有n个数值，最主要的是主DNS服务器的FQDN，点不可省略<br><strong>注意</strong>：SOA必须是区域数据库文件第一条记录<blockquote>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@ 600 IN SOA  dns.od.com. 管理员邮箱（dnsadmin.od.com.）（</span><br><span class="line">     序列号(serial number) ;注释内容，十进制数据，不能超过10位，通常使用日期时间戳，例如2014031001</span><br><span class="line">     刷新时间(refresh time) ;即每隔多久到主服务器检查一次</span><br><span class="line">     重试时间(retry time) ;应该小于refresh time</span><br><span class="line">     过期时间(expire time);当辅助DNS服务器无法联系上主DNS服务器时，辅助DNS服务器可以在多长时间内认为其缓存是有效的，并供用户查询。</span><br><span class="line">     netgative answer ttl ;非权威应答的ttl，缓存DNS服务器可以缓存记录多长时间</span><br><span class="line"> ）</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<h4 id="NS记录"><a href="#NS记录" class="headerlink" title="NS记录"></a>NS记录</h4><p>NS：可以有多条，每一个NS记录，必须对应一个A记录</p>
+<ul>
+<li>name:区域名称，通常可以简写为@</li>
+<li>value：DNS服务器的FQDN(可以使用相对名称)<blockquote>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@ 600 IN NS ns1</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<h4 id="A记录"><a href="#A记录" class="headerlink" title="A记录"></a>A记录</h4><p>A：只能定义在正向区域数据库文件中（ipv4-&gt;FQDN）</p>
+<ul>
+<li>name:FQDN（可以使用相对名称)</li>
+<li>value:IP<blockquote>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www  600(单位s) IN A 10.4.7.11</span><br><span class="line">www  600(单位s) IN A 10.4.7.12</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<p><strong>注</strong> 可以做轮询</p>
+<h4 id="MX记录"><a href="#MX记录" class="headerlink" title="MX记录"></a>MX记录</h4><p>MX：邮件交换记录，可以有多个（用的不多）</p>
+<ul>
+<li>name:区域名称，用于标识smtp服务器</li>
+<li>value：包含优先级和FQDN</li>
+<li>优先级：0-99，数字越小，级别越高，<blockquote>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@ 600 IN MX 10 mail</span><br><span class="line">@ 600 IN MX 20 smtp</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<h4 id="CNAME记录"><a href="#CNAME记录" class="headerlink" title="CNAME记录"></a>CNAME记录</h4><p>CNAME：canonical name，别名（FQDN-&gt;FQDN）</p>
+<ul>
+<li>name ：FQDN</li>
+<li>value :FQDN<blockquote>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eshop IN CNAME www</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<h2 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h2><ul>
+<li>@ORIGIN .</li>
+<li>@TTL 60<br>等</li>
+</ul>
+<h1 id="实战正解主机域配置"><a href="#实战正解主机域配置" class="headerlink" title="实战正解主机域配置"></a>实战正解主机域配置</h1><h2 id="在-etc-named-rfc1912-zones文件内最下，添加以下内容"><a href="#在-etc-named-rfc1912-zones文件内最下，添加以下内容" class="headerlink" title="在/etc/named.rfc1912.zones文件内最下，添加以下内容"></a>在/etc/named.rfc1912.zones文件内最下，添加以下内容</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;host.com&quot; IN &#123;</span><br><span class="line">        type  master;</span><br><span class="line">        file  &quot;host.com.zone&quot;;</span><br><span class="line">        allow-update &#123; 10.4.7.11;10.4.7.12; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="在-var-named下创建host-com-zone文件，写入以下内容"><a href="#在-var-named下创建host-com-zone文件，写入以下内容" class="headerlink" title="在/var/named下创建host.com.zone文件，写入以下内容"></a>在/var/named下创建host.com.zone文件，写入以下内容</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$TTL 600	; 10 minutes</span><br><span class="line">@       		IN SOA	dns.host.com. dnsadmin.host.com. (</span><br><span class="line">				2019020701 ; serial</span><br><span class="line">				10800      ; refresh (3 hours)</span><br><span class="line">				900        ; retry (15 minutes)</span><br><span class="line">				604800     ; expire (1 week)</span><br><span class="line">				86400      ; minimum (1 day)</span><br><span class="line">				)</span><br><span class="line">			       NS   ns1.host.com.</span><br><span class="line">$ORIGIN host.com.</span><br><span class="line">$TTL 60	; 1 minute</span><br><span class="line">ns1      	A    10.4.7.11</span><br><span class="line">HDSS7-11 	A    10.4.7.11</span><br><span class="line">HDSS7-12	A 	 10.4.7.12</span><br></pre></td></tr></table></figure>
+<p>三种配置方式：</p>
+<ul>
+<li>用宏定义@ORIGIN . 下面用host.com</li>
+<li>不用宏定义，下面用@</li>
+<li>不用宏定义，下面用host.com.</li>
+</ul>
+<h2 id="检查配置并生效"><a href="#检查配置并生效" class="headerlink" title="检查配置并生效"></a>检查配置并生效</h2><h3 id="检查自定义区域配置"><a href="#检查自定义区域配置" class="headerlink" title="检查自定义区域配置"></a>检查自定义区域配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#named-checkzone host.com. /var/named/host.com.zone</span><br><span class="line">zone host.com/IN: loaded serial 2018121502</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+<h3 id="检查主配置文件"><a href="#检查主配置文件" class="headerlink" title="检查主配置文件"></a>检查主配置文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#named-checkconf</span><br></pre></td></tr></table></figure>
+<h3 id="重载named服务"><a href="#重载named服务" class="headerlink" title="重载named服务"></a>重载named服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#systemctl reload named</span><br></pre></td></tr></table></figure>
+<h3 id="检查该正解域是否生效"><a href="#检查该正解域是否生效" class="headerlink" title="检查该正解域是否生效"></a>检查该正解域是否生效</h3><h2 id="维护正解域（增、删、改、查）"><a href="#维护正解域（增、删、改、查）" class="headerlink" title="维护正解域（增、删、改、查）"></a>维护正解域（增、删、改、查）</h2><h3 id="增加一条资源记录"><a href="#增加一条资源记录" class="headerlink" title="增加一条资源记录"></a>增加一条资源记录</h3><h3 id="删除一条资源记录"><a href="#删除一条资源记录" class="headerlink" title="删除一条资源记录"></a>删除一条资源记录</h3><h3 id="修改一条资源记录"><a href="#修改一条资源记录" class="headerlink" title="修改一条资源记录"></a>修改一条资源记录</h3><h3 id="查询记录"><a href="#查询记录" class="headerlink" title="查询记录"></a>查询记录</h3>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/15/实验文档1：BIND9的安装部署/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stanley Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stanley's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/15/实验文档1：BIND9的安装部署/" class="post-title-link" itemprop="url">实验文档1：BIND9的安装部署</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-15 10:29:41" itemprop="dateCreated datePublished" datetime="2018-12-15T10:29:41+08:00">2018-12-15</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-02-22 16:27:22" itemprop="dateModified" datetime="2019-02-22T16:27:22+08:00">2019-02-22</time>
               
             
           </span>
@@ -1847,7 +2125,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1943,7 +2221,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">21k</span>
+    <span title="站点总字数">24k</span>
   
 
   
@@ -1952,7 +2230,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">19 分钟</span>
+    <span title="站点阅读时长">22 分钟</span>
   
 </div>
 
@@ -2408,6 +2686,8 @@
     
       
         
+      
+    
       
     
       

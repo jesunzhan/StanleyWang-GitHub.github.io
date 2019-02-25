@@ -103,24 +103,24 @@
 
 
 
-  <meta name="description" content="欢迎加入王导的VIP学习qq群：==&amp;gt;932194668&amp;lt;==   DNS主辅同步架构   IP 主机名 功能     10.4.7.11 HDSS7-11.host.com DNS主   10.4.7.12 HDSS7-12.host.com DNS辅    辅助DNS主机上安装部署BIND9安装BIND9软件1234567#yum install bind============">
+  <meta name="description" content="欢迎加入王导的VIP学习qq群：==&amp;gt;932194668&amp;lt;==">
 <meta property="og:type" content="article">
-<meta property="og:title" content="实验文档4：DNS主辅同步">
-<meta property="og:url" content="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档4：DNS主辅同步/index.html">
+<meta property="og:title" content="实验文档5：智能DNS实战">
+<meta property="og:url" content="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档5：智能DNS实战/index.html">
 <meta property="og:site_name" content="Stanley&#39;s Blog">
-<meta property="og:description" content="欢迎加入王导的VIP学习qq群：==&amp;gt;932194668&amp;lt;==   DNS主辅同步架构   IP 主机名 功能     10.4.7.11 HDSS7-11.host.com DNS主   10.4.7.12 HDSS7-12.host.com DNS辅    辅助DNS主机上安装部署BIND9安装BIND9软件1234567#yum install bind============">
+<meta property="og:description" content="欢迎加入王导的VIP学习qq群：==&amp;gt;932194668&amp;lt;==">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-02-25T07:21:52.374Z">
+<meta property="og:updated_time" content="2019-02-25T07:48:51.591Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="实验文档4：DNS主辅同步">
-<meta name="twitter:description" content="欢迎加入王导的VIP学习qq群：==&amp;gt;932194668&amp;lt;==   DNS主辅同步架构   IP 主机名 功能     10.4.7.11 HDSS7-11.host.com DNS主   10.4.7.12 HDSS7-12.host.com DNS辅    辅助DNS主机上安装部署BIND9安装BIND9软件1234567#yum install bind============">
+<meta name="twitter:title" content="实验文档5：智能DNS实战">
+<meta name="twitter:description" content="欢迎加入王导的VIP学习qq群：==&amp;gt;932194668&amp;lt;==">
 
 
 
 
 
 
-  <link rel="canonical" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档4：DNS主辅同步/">
+  <link rel="canonical" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档5：智能DNS实战/">
 
 
 
@@ -130,7 +130,7 @@
   };
 </script>
 
-  <title>实验文档4：DNS主辅同步 | Stanley's Blog</title>
+  <title>实验文档5：智能DNS实战 | Stanley's Blog</title>
   
 
 
@@ -341,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档4：DNS主辅同步/">
+    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档5：智能DNS实战/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Stanley Wang">
@@ -358,7 +358,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">实验文档4：DNS主辅同步
+          <h1 class="post-title" itemprop="name headline">实验文档5：智能DNS实战
 
               
             
@@ -384,7 +384,7 @@
                 
               
 
-              <time title="创建时间：2018-12-16 14:12:56" itemprop="dateCreated datePublished" datetime="2018-12-16T14:12:56+08:00">2018-12-16</time>
+              <time title="创建时间：2018-12-16 12:12:56" itemprop="dateCreated datePublished" datetime="2018-12-16T12:12:56+08:00">2018-12-16</time>
             
 
             
@@ -401,7 +401,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-02-25 15:21:52" itemprop="dateModified" datetime="2019-02-25T15:21:52+08:00">2019-02-25</time>
+                <time title="修改时间：2019-02-25 15:48:51" itemprop="dateModified" datetime="2019-02-25T15:48:51+08:00">2019-02-25</time>
               
             
           </span>
@@ -447,7 +447,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">4.7k</span>
+                <span title="本文字数">41</span>
               
 
               
@@ -461,7 +461,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">4 分钟</span>
+                <span title="阅读时长">1 分钟</span>
               
             </div>
           
@@ -485,42 +485,6 @@
 <blockquote class="blockquote-center"><p>欢迎加入王导的VIP学习qq群：==&gt;<a href="http://shang.qq.com/wpa/qunwpa?idkey=78869fddc5a661acb0639315eb52997c108de6625df5f0ee2f0372f176a032a6" target="_blank" rel="noopener"><font color="FF7F50">932194668</font></a>&lt;==</p>
 </blockquote>
 <hr>
-<h1 id="DNS主辅同步架构"><a href="#DNS主辅同步架构" class="headerlink" title="DNS主辅同步架构"></a>DNS主辅同步架构</h1><table>
-<thead>
-<tr>
-<th>IP</th>
-<th>主机名</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>10.4.7.11</td>
-<td>HDSS7-11.host.com</td>
-<td>DNS主</td>
-</tr>
-<tr>
-<td>10.4.7.12</td>
-<td>HDSS7-12.host.com</td>
-<td>DNS辅</td>
-</tr>
-</tbody>
-</table>
-<h1 id="辅助DNS主机上安装部署BIND9"><a href="#辅助DNS主机上安装部署BIND9" class="headerlink" title="辅助DNS主机上安装部署BIND9"></a>辅助DNS主机上安装部署BIND9</h1><h2 id="安装BIND9软件"><a href="#安装BIND9软件" class="headerlink" title="安装BIND9软件"></a>安装BIND9软件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#yum install bind</span><br><span class="line">=============================================================================================================================================================</span><br><span class="line"> Package                                       Arch                          Version                                    Repository                      Size</span><br><span class="line">=============================================================================================================================================================</span><br><span class="line">Installing:</span><br><span class="line"> bind                                          x86_64                        32:9.9.4-73.el7_6                          updates                        1.8 M</span><br></pre></td></tr></table></figure>
-<p><strong>注意</strong>：辅助DNS的BIND9软件版本应小于等于主DNS的BIND9软件版本</p>
-<h2 id="修改辅助DNS主配置文件"><a href="#修改辅助DNS主配置文件" class="headerlink" title="修改辅助DNS主配置文件"></a>修改辅助DNS主配置文件</h2><p>修改主配置文件，并加入<code>masterfile-format text;</code><br><figure class="highlight plain"><figcaption><span>/etc/named.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">options &#123;</span><br><span class="line">	listen-on port 53 &#123; 10.4.7.12; &#125;;</span><br><span class="line">	directory 	&quot;/var/named&quot;;</span><br><span class="line">	dump-file 	&quot;/var/named/data/cache_dump.db&quot;;</span><br><span class="line">	statistics-file &quot;/var/named/data/named_stats.txt&quot;;</span><br><span class="line">	memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</span><br><span class="line">	allow-query     &#123; any; &#125;;</span><br><span class="line">    masterfile-format text;</span><br><span class="line">	/* </span><br><span class="line">	 - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.</span><br><span class="line">	 - If you are building a RECURSIVE (caching) DNS server, you need to enable </span><br><span class="line">	   recursion. </span><br><span class="line">	 - If your recursive DNS server has a public IP address, you MUST enable access </span><br><span class="line">	   control to limit queries to your legitimate users. Failing to do so will</span><br><span class="line">	   cause your server to become part of large scale DNS amplification </span><br><span class="line">	   attacks. Implementing BCP38 within your network would greatly</span><br><span class="line">	   reduce such attack surface </span><br><span class="line">	*/</span><br><span class="line">	recursion yes;</span><br><span class="line"></span><br><span class="line">	dnssec-enable no;</span><br><span class="line">    dnssec-validation no;</span><br><span class="line"></span><br><span class="line">	/* Path to ISC DLV key */</span><br><span class="line">	bindkeys-file &quot;/etc/named.iscdlv.key&quot;;</span><br><span class="line"></span><br><span class="line">	managed-keys-directory &quot;/var/named/dynamic&quot;;</span><br><span class="line"></span><br><span class="line">	pid-file &quot;/run/named/named.pid&quot;;</span><br><span class="line">	session-keyfile &quot;/run/named/session.key&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">logging &#123;</span><br><span class="line">        channel default_debug &#123;</span><br><span class="line">                file &quot;data/named.run&quot;;</span><br><span class="line">                severity dynamic;</span><br><span class="line">        &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">zone &quot;.&quot; IN &#123;</span><br><span class="line">	type hint;</span><br><span class="line">	file &quot;named.ca&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">include &quot;/etc/named.rfc1912.zones&quot;;</span><br><span class="line">include &quot;/etc/named.root.key&quot;;</span><br></pre></td></tr></table></figure></p>
-<h1 id="修改主DNS主配置文件"><a href="#修改主DNS主配置文件" class="headerlink" title="修改主DNS主配置文件"></a>修改主DNS主配置文件</h1><h2 id="加入以下配置"><a href="#加入以下配置" class="headerlink" title="加入以下配置"></a>加入以下配置</h2><figure class="highlight plain"><figcaption><span>/etc/named.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">allow-transfer &#123; 10.4.7.12; &#125;;</span><br><span class="line">also-notify &#123; 10.4.7.12; &#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="检查配置并重启主DNS"><a href="#检查配置并重启主DNS" class="headerlink" title="检查配置并重启主DNS"></a>检查配置并重启主DNS</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># named-checkconf</span><br><span class="line"># systemctl restart named</span><br></pre></td></tr></table></figure>
-<h2 id="检查完全区域数据传送"><a href="#检查完全区域数据传送" class="headerlink" title="检查完全区域数据传送"></a>检查完全区域数据传送</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-12 ~]# dig -t axfr host.com @10.4.7.11</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-73.el7_6 &lt;&lt;&gt;&gt; -t axfr host.com @10.4.7.11</span><br><span class="line">;; global options: +cmd</span><br><span class="line">host.com.		600	IN	SOA	dns.host.com. dnsadmin.host.com. 2018121601 10800 900 604800 86400</span><br><span class="line">host.com.		600	IN	NS	ns1.host.com.</span><br><span class="line">HDSS7-11.host.com.	60	IN	A	10.4.7.11</span><br><span class="line">HDSS7-12.host.com.	60	IN	A	10.4.7.12</span><br><span class="line">ns1.host.com.		60	IN	A	10.4.7.11</span><br><span class="line">host.com.		600	IN	SOA	dns.host.com. dnsadmin.host.com. 2018121601 10800 900 604800 86400</span><br><span class="line">;; Query time: 0 msec</span><br><span class="line">;; SERVER: 10.4.7.11#53(10.4.7.11)</span><br><span class="line">;; WHEN: Sun Dec 16 14:16:01 CST 2018</span><br><span class="line">;; XFR size: 6 records (messages 1, bytes 220)</span><br></pre></td></tr></table></figure>
-<h1 id="辅助DNS上创建自定义正解区域配置"><a href="#辅助DNS上创建自定义正解区域配置" class="headerlink" title="辅助DNS上创建自定义正解区域配置"></a>辅助DNS上创建自定义正解区域配置</h1><figure class="highlight plain"><figcaption><span>/etc/named.rfc1912.zones</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;host.com&quot; IN &#123;</span><br><span class="line">        type  slave;</span><br><span class="line">		masters &#123; 10.4.7.11; &#125;;</span><br><span class="line">        file  &quot;slaves/host.com.zone&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="检查配置并启动辅助DNS"><a href="#检查配置并启动辅助DNS" class="headerlink" title="检查配置并启动辅助DNS"></a>检查配置并启动辅助DNS</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># named-checkconf</span><br><span class="line"># systemctl start named</span><br></pre></td></tr></table></figure>
-<h2 id="检查同步过来的区域数据库文件"><a href="#检查同步过来的区域数据库文件" class="headerlink" title="检查同步过来的区域数据库文件"></a>检查同步过来的区域数据库文件</h2><figure class="highlight plain"><figcaption><span>/var/named/slaves/host.com.zone</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-12 slaves]# ll</span><br><span class="line">-rw-r--r-- 1 named named 392 Feb 10 21:08 host.com.zone</span><br><span class="line">[root@hdss7-12 slaves]# cat host.com.zone </span><br><span class="line">$ORIGIN .</span><br><span class="line">$TTL 600	; 10 minutes</span><br><span class="line">host.com		IN SOA	dns.host.com. dnsadmin.host.com. (</span><br><span class="line">				2018121601 ; serial</span><br><span class="line">				10800      ; refresh (3 hours)</span><br><span class="line">				900        ; retry (15 minutes)</span><br><span class="line">				604800     ; expire (1 week)</span><br><span class="line">				86400      ; minimum (1 day)</span><br><span class="line">				)</span><br><span class="line">			NS	ns1.host.com.</span><br><span class="line">$ORIGIN host.com.</span><br><span class="line">$TTL 60	; 1 minute</span><br><span class="line">HDSS7-11		A	10.4.7.11</span><br><span class="line">HDSS7-12		A	10.4.7.12</span><br><span class="line">ns1			A	10.4.7.11</span><br></pre></td></tr></table></figure>
-<h2 id="检查解析是否正确"><a href="#检查解析是否正确" class="headerlink" title="检查解析是否正确"></a>检查解析是否正确</h2><h3 id="使用主DNS查询一个A记录"><a href="#使用主DNS查询一个A记录" class="headerlink" title="使用主DNS查询一个A记录"></a>使用主DNS查询一个A记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># dig -t A HDSS7-11.host.com @10.4.7.11 +short</span><br><span class="line">10.4.7.11</span><br></pre></td></tr></table></figure>
-<h3 id="使用辅助DNS查询一个A记录"><a href="#使用辅助DNS查询一个A记录" class="headerlink" title="使用辅助DNS查询一个A记录"></a>使用辅助DNS查询一个A记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># dig -t A HDSS7-11.host.com @10.4.7.12 +short</span><br><span class="line">10.4.7.11</span><br></pre></td></tr></table></figure>
-<h1 id="辅助DNS上创建自定义反解区域配置"><a href="#辅助DNS上创建自定义反解区域配置" class="headerlink" title="辅助DNS上创建自定义反解区域配置"></a>辅助DNS上创建自定义反解区域配置</h1><p>略</p>
-<h1 id="增加、删除、修改记录，并验证同步"><a href="#增加、删除、修改记录，并验证同步" class="headerlink" title="增加、删除、修改记录，并验证同步"></a>增加、删除、修改记录，并验证同步</h1><p><strong>注意</strong>：一定要手动修改主DNS上SOA记录里的serial值！</p>
-<h2 id="增加记录"><a href="#增加记录" class="headerlink" title="增加记录"></a>增加记录</h2><h2 id="删除记录"><a href="#删除记录" class="headerlink" title="删除记录"></a>删除记录</h2><h2 id="修改记录"><a href="#修改记录" class="headerlink" title="修改记录"></a>修改记录</h2><h1 id="再增加一个od-com的业务域，并验证主辅同步（复习）"><a href="#再增加一个od-com的业务域，并验证主辅同步（复习）" class="headerlink" title="再增加一个od.com的业务域，并验证主辅同步（复习）"></a>再增加一个od.com的业务域，并验证主辅同步（复习）</h1><h2 id="主DNS上增加自定义区域"><a href="#主DNS上增加自定义区域" class="headerlink" title="主DNS上增加自定义区域"></a>主DNS上增加自定义区域</h2><h2 id="主DNS上增加自定义区域数据库文件"><a href="#主DNS上增加自定义区域数据库文件" class="headerlink" title="主DNS上增加自定义区域数据库文件"></a>主DNS上增加自定义区域数据库文件</h2><h2 id="主DNS上增加自定义区域资源记录"><a href="#主DNS上增加自定义区域资源记录" class="headerlink" title="主DNS上增加自定义区域资源记录"></a>主DNS上增加自定义区域资源记录</h2><h2 id="检查配置并重启主DNS服务"><a href="#检查配置并重启主DNS服务" class="headerlink" title="检查配置并重启主DNS服务"></a>检查配置并重启主DNS服务</h2><h2 id="辅助DNS上增加自定义区域"><a href="#辅助DNS上增加自定义区域" class="headerlink" title="辅助DNS上增加自定义区域"></a>辅助DNS上增加自定义区域</h2><h2 id="检查完全区域数据传送-1"><a href="#检查完全区域数据传送-1" class="headerlink" title="检查完全区域数据传送"></a>检查完全区域数据传送</h2><h2 id="检查配置并重启辅助DNS服务"><a href="#检查配置并重启辅助DNS服务" class="headerlink" title="检查配置并重启辅助DNS服务"></a>检查配置并重启辅助DNS服务</h2><h2 id="验证主辅同步"><a href="#验证主辅同步" class="headerlink" title="验证主辅同步"></a>验证主辅同步</h2><h3 id="分别使用主DNS和辅助DNS查询新业务域的A记录"><a href="#分别使用主DNS和辅助DNS查询新业务域的A记录" class="headerlink" title="分别使用主DNS和辅助DNS查询新业务域的A记录"></a>分别使用主DNS和辅助DNS查询新业务域的A记录</h3><h3 id="在主DNS上新增一条A记录，并验证主辅同步"><a href="#在主DNS上新增一条A记录，并验证主辅同步" class="headerlink" title="在主DNS上新增一条A记录，并验证主辅同步"></a>在主DNS上新增一条A记录，并验证主辅同步</h3><h3 id="在主DNS上修改一条A记录，并验证主辅同步"><a href="#在主DNS上修改一条A记录，并验证主辅同步" class="headerlink" title="在主DNS上修改一条A记录，并验证主辅同步"></a>在主DNS上修改一条A记录，并验证主辅同步</h3><h3 id="在主DNS上删除一条A记录，并验证主辅同步"><a href="#在主DNS上删除一条A记录，并验证主辅同步" class="headerlink" title="在主DNS上删除一条A记录，并验证主辅同步"></a>在主DNS上删除一条A记录，并验证主辅同步</h3><h1 id="客户端配置DNS解析高可用"><a href="#客户端配置DNS解析高可用" class="headerlink" title="客户端配置DNS解析高可用"></a>客户端配置DNS解析高可用</h1><p>在客户端主机（以Linux主机为例，Windows和Mac操作系统略）配置主、辅DNS<br><figure class="highlight plain"><figcaption><span>/etc/resolv.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#cat /etc/resolv.conf </span><br><span class="line"># Generated by NetworkManager</span><br><span class="line">search host.com</span><br><span class="line">nameserver 10.4.7.11</span><br><span class="line">nameserver 10.4.7.12</span><br></pre></td></tr></table></figure></p>
-<p>这样客户端高可用就配置好了，任意一个DNS服务器宕机也不会影响正常解析</p>
 
       
     </div>
@@ -580,8 +544,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/16/实验文档5：智能DNS实战/" rel="next" title="实验文档5：智能DNS实战">
-                <i class="fa fa-chevron-left"></i> 实验文档5：智能DNS实战
+              <a href="/2018/12/16/实验文档6：bind-chroot安装部署实战/" rel="next" title="实验文档6：bind-chroot安装部署实战">
+                <i class="fa fa-chevron-left"></i> 实验文档6：bind-chroot安装部署实战
               </a>
             
           </div>
@@ -590,8 +554,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/12/16/实验文档3：自定义反解域/" rel="prev" title="实验文档3：自定义反解域">
-                实验文档3：自定义反解域 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/12/16/实验文档4：DNS主辅同步/" rel="prev" title="实验文档4：DNS主辅同步">
+                实验文档4：DNS主辅同步 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -637,17 +601,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -734,23 +689,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS主辅同步架构"><span class="nav-number">1.</span> <span class="nav-text">DNS主辅同步架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#辅助DNS主机上安装部署BIND9"><span class="nav-number">2.</span> <span class="nav-text">辅助DNS主机上安装部署BIND9</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装BIND9软件"><span class="nav-number">2.1.</span> <span class="nav-text">安装BIND9软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改辅助DNS主配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">修改辅助DNS主配置文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改主DNS主配置文件"><span class="nav-number">3.</span> <span class="nav-text">修改主DNS主配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#加入以下配置"><span class="nav-number">3.1.</span> <span class="nav-text">加入以下配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查配置并重启主DNS"><span class="nav-number">3.2.</span> <span class="nav-text">检查配置并重启主DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查完全区域数据传送"><span class="nav-number">3.3.</span> <span class="nav-text">检查完全区域数据传送</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#辅助DNS上创建自定义正解区域配置"><span class="nav-number">4.</span> <span class="nav-text">辅助DNS上创建自定义正解区域配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#检查配置并启动辅助DNS"><span class="nav-number">4.1.</span> <span class="nav-text">检查配置并启动辅助DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查同步过来的区域数据库文件"><span class="nav-number">4.2.</span> <span class="nav-text">检查同步过来的区域数据库文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查解析是否正确"><span class="nav-number">4.3.</span> <span class="nav-text">检查解析是否正确</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用主DNS查询一个A记录"><span class="nav-number">4.3.1.</span> <span class="nav-text">使用主DNS查询一个A记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用辅助DNS查询一个A记录"><span class="nav-number">4.3.2.</span> <span class="nav-text">使用辅助DNS查询一个A记录</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#辅助DNS上创建自定义反解区域配置"><span class="nav-number">5.</span> <span class="nav-text">辅助DNS上创建自定义反解区域配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#增加、删除、修改记录，并验证同步"><span class="nav-number">6.</span> <span class="nav-text">增加、删除、修改记录，并验证同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#增加记录"><span class="nav-number">6.1.</span> <span class="nav-text">增加记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除记录"><span class="nav-number">6.2.</span> <span class="nav-text">删除记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改记录"><span class="nav-number">6.3.</span> <span class="nav-text">修改记录</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再增加一个od-com的业务域，并验证主辅同步（复习）"><span class="nav-number">7.</span> <span class="nav-text">再增加一个od.com的业务域，并验证主辅同步（复习）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主DNS上增加自定义区域"><span class="nav-number">7.1.</span> <span class="nav-text">主DNS上增加自定义区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主DNS上增加自定义区域数据库文件"><span class="nav-number">7.2.</span> <span class="nav-text">主DNS上增加自定义区域数据库文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主DNS上增加自定义区域资源记录"><span class="nav-number">7.3.</span> <span class="nav-text">主DNS上增加自定义区域资源记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查配置并重启主DNS服务"><span class="nav-number">7.4.</span> <span class="nav-text">检查配置并重启主DNS服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#辅助DNS上增加自定义区域"><span class="nav-number">7.5.</span> <span class="nav-text">辅助DNS上增加自定义区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查完全区域数据传送-1"><span class="nav-number">7.6.</span> <span class="nav-text">检查完全区域数据传送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查配置并重启辅助DNS服务"><span class="nav-number">7.7.</span> <span class="nav-text">检查配置并重启辅助DNS服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证主辅同步"><span class="nav-number">7.8.</span> <span class="nav-text">验证主辅同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分别使用主DNS和辅助DNS查询新业务域的A记录"><span class="nav-number">7.8.1.</span> <span class="nav-text">分别使用主DNS和辅助DNS查询新业务域的A记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在主DNS上新增一条A记录，并验证主辅同步"><span class="nav-number">7.8.2.</span> <span class="nav-text">在主DNS上新增一条A记录，并验证主辅同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在主DNS上修改一条A记录，并验证主辅同步"><span class="nav-number">7.8.3.</span> <span class="nav-text">在主DNS上修改一条A记录，并验证主辅同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在主DNS上删除一条A记录，并验证主辅同步"><span class="nav-number">7.8.4.</span> <span class="nav-text">在主DNS上删除一条A记录，并验证主辅同步</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端配置DNS解析高可用"><span class="nav-number">8.</span> <span class="nav-text">客户端配置DNS解析高可用</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       

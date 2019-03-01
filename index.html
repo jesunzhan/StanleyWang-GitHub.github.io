@@ -1917,7 +1917,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-01 09:35:54" itemprop="dateModified" datetime="2019-03-01T09:35:54+08:00">2019-03-01</time>
+                <time title="修改时间：2019-03-01 16:28:57" itemprop="dateModified" datetime="2019-03-01T16:28:57+08:00">2019-03-01</time>
               
             
           </span>
@@ -1963,7 +1963,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">41</span>
+                <span title="本文字数">2.9k</span>
               
 
               
@@ -1977,7 +1977,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">1 分钟</span>
+                <span title="阅读时长">3 分钟</span>
               
             </div>
           
@@ -2003,6 +2003,19 @@
 <blockquote class="blockquote-center"><p>欢迎加入王导的VIP学习qq群：==&gt;<a href="http://shang.qq.com/wpa/qunwpa?idkey=78869fddc5a661acb0639315eb52997c108de6625df5f0ee2f0372f176a032a6" target="_blank" rel="noopener"><font color="FF7F50">932194668</font></a>&lt;==</p>
 </blockquote>
 <hr>
+<h1 id="BIND9的acl访问控制列表"><a href="#BIND9的acl访问控制列表" class="headerlink" title="BIND9的acl访问控制列表"></a>BIND9的acl访问控制列表</h1><h2 id="4个内置acl"><a href="#4个内置acl" class="headerlink" title="4个内置acl"></a>4个内置acl</h2><ul>
+<li>any：任何主机</li>
+<li>none：没有主机</li>
+<li>localhost：本机</li>
+<li>localnet：本地子网所有IP</li>
+</ul>
+<h2 id="自定义acl"><a href="#自定义acl" class="headerlink" title="自定义acl"></a>自定义acl</h2><h3 id="简单acl"><a href="#简单acl" class="headerlink" title="简单acl"></a>简单acl</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">acl &quot;someips&quot; &#123;                               //定义一个名为someips的ACL  </span><br><span class="line">  10.0.0.1; 192.168.23.1; 192.168.23.15;      //包含3个单个IP  </span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="复杂acl"><a href="#复杂acl" class="headerlink" title="复杂acl"></a>复杂acl</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">acl &quot;complex&quot; &#123;             //定义一个名为complex的ACL  </span><br><span class="line">  &quot;someips&quot;;                //可以嵌套包含其他ACL  </span><br><span class="line">  10.0.15.0/24;             //包含10.0.15.0子网中的所有IP  </span><br><span class="line">  !10.0.16.1/24;            //非10.0.16.1子网的IP  </span><br><span class="line">  &#123;10.0.17.1;10.0.18.2;&#125;;   //包含了一个IP组  </span><br><span class="line">  localhost；               //本地网络接口IP（含实际接口IP和127.0.0.1）  </span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="使用acl"><a href="#使用acl" class="headerlink" title="使用acl"></a>使用acl</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">allow-update &#123; &quot;someips&quot;; &#125;;</span><br><span class="line">allow-transfer &#123; &quot;complex&quot;; &#125;;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h1 id="BIND9的view视图功能"><a href="#BIND9的view视图功能" class="headerlink" title="BIND9的view视图功能"></a>BIND9的view视图功能</h1><p>view语句定义了视图功能。视图是BIND9提供的强大的新功能，允许DNS服务器根据客户端的不同，有区别地回答DNS查询，每个视图定义了一个被特定客户端子集见到的DNS名称空间。这个功能在一台主机上运行多个形式上独立的DNS服务器时特别有用。</p>
+<h2 id="view的语法范例"><a href="#view的语法范例" class="headerlink" title="view的语法范例"></a>view的语法范例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">view view_name [class] &#123;</span><br><span class="line">    match-clients &#123; address_match_list &#125; ;</span><br><span class="line">    match-destinations &#123; address_match_list &#125; ;</span><br><span class="line">    match-recursive-only &#123; yes_or_no &#125; ;</span><br><span class="line">    [ view_option; ...]</span><br><span class="line">    [ zone-statistics yes_or_no ; ]</span><br><span class="line">    [ zone_statement; ...]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="view配置范例1：按照不同业务环境解析"><a href="#view配置范例1：按照不同业务环境解析" class="headerlink" title="view配置范例1：按照不同业务环境解析"></a>view配置范例1：按照不同业务环境解析</h2><p><strong>注：</strong>以下是内网DNS的view使用范例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">acl &quot;env-test&quot; &#123;</span><br><span class="line">    10.4.7.0/24;</span><br><span class="line">&#125;;</span><br><span class="line">acl &quot;env-pre&quot; &#123;</span><br><span class="line">    10.4.8.0/24;</span><br><span class="line">&#125;;</span><br><span class="line">acl &quot;env-prd&quot; &#123;</span><br><span class="line">    10.4.9.0/24;</span><br><span class="line">&#125;</span><br><span class="line">view &quot;env-test&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;env-test&quot;; &#125;;</span><br><span class="line">    recursion yes;</span><br><span class="line">    zone &quot;od.com&quot; &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;env-test.od.com.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;env-pre&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;env-pre&quot;; &#125;;</span><br><span class="line">    recursion yes;</span><br><span class="line">    zone &quot;od.com&quot; &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;env-pre.od.com.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;env-prd&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;env-prd&quot;; &#125;;</span><br><span class="line">    recursion yes;</span><br><span class="line">    zone &quot;od.com&quot; &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;env-prd.od.com.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="view配置范例2：智能DNS"><a href="#view配置范例2：智能DNS" class="headerlink" title="view配置范例2：智能DNS"></a>view配置范例2：智能DNS</h2><p><strong>注：</strong>以下特指公网智能DNS配置范例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//电信IP访问控制列表</span><br><span class="line">acl &quot;telecomip&quot;&#123; telecom_IP; ... &#125;;</span><br><span class="line">//联通IP访问控制列表</span><br><span class="line">acl &quot;netcomip&quot;&#123; netcom_IP; ... &#125;;</span><br><span class="line">view &quot;telecom&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;telecomip&quot;; &#125;;</span><br><span class="line">    zone &quot;ZONE_NAME&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;ZONE_NAME.telecom.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;netcom&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;netcomip&quot;; &#125;;</span><br><span class="line">    zone &quot;ZONE_NAME&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;ZONE_NAME.netcom.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;default&quot; &#123;</span><br><span class="line">    match-clients &#123; any; &#125;;</span><br><span class="line">    zone &quot;ZONE_NAME&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;ZONE_NAME.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -4110,7 +4123,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">72k</span>
+    <span title="站点总字数">75k</span>
   
 
   
@@ -4119,7 +4132,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:06</span>
+    <span title="站点阅读时长">1:08</span>
   
 </div>
 

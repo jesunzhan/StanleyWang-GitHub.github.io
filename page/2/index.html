@@ -338,6 +338,979 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档4：DNS主辅同步/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stanley Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stanley's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/16/实验文档4：DNS主辅同步/" class="post-title-link" itemprop="url">实验文档4：DNS主辅同步</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-16 14:12:56" itemprop="dateCreated datePublished" datetime="2018-12-16T14:12:56+08:00">2018-12-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-06 17:23:10" itemprop="dateModified" datetime="2019-03-06T17:23:10+08:00">2019-03-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Web-DNS技术/" itemprop="url" rel="index"><span itemprop="name">Web DNS技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.8k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<blockquote class="blockquote-center"><p>欢迎加入王导的VIP学习qq群：==&gt;<a href="http://shang.qq.com/wpa/qunwpa?idkey=78869fddc5a661acb0639315eb52997c108de6625df5f0ee2f0372f176a032a6" target="_blank" rel="noopener"><font color="FF7F50">932194668</font></a>&lt;==</p>
+</blockquote>
+<hr>
+<h1 id="DNS主辅同步架构"><a href="#DNS主辅同步架构" class="headerlink" title="DNS主辅同步架构"></a>DNS主辅同步架构</h1><table>
+<thead>
+<tr>
+<th>IP</th>
+<th>主机名</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.4.7.11</td>
+<td>HDSS7-11.host.com</td>
+<td>DNS主</td>
+</tr>
+<tr>
+<td>10.4.7.12</td>
+<td>HDSS7-12.host.com</td>
+<td>DNS辅</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>：所有资源记录的增、删、改的操作，均在主DNS上进行，辅助DNS仅提供查询功能</p>
+<h1 id="辅助DNS主机上安装部署BIND9"><a href="#辅助DNS主机上安装部署BIND9" class="headerlink" title="辅助DNS主机上安装部署BIND9"></a>辅助DNS主机上安装部署BIND9</h1><h2 id="安装BIND9软件"><a href="#安装BIND9软件" class="headerlink" title="安装BIND9软件"></a>安装BIND9软件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#yum install bind</span><br><span class="line">=============================================================================================================================================================</span><br><span class="line"> Package                                       Arch                          Version                                    Repository                      Size</span><br><span class="line">=============================================================================================================================================================</span><br><span class="line">Installing:</span><br><span class="line"> bind                                          x86_64                        32:9.9.4-73.el7_6                          updates                        1.8 M</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：辅助DNS的BIND9软件版本应小于等于主DNS的BIND9软件版本</p>
+<h2 id="修改辅助DNS主配置文件"><a href="#修改辅助DNS主配置文件" class="headerlink" title="修改辅助DNS主配置文件"></a>修改辅助DNS主配置文件</h2><p>修改主配置文件，并加入<code>masterfile-format text;</code><br><figure class="highlight plain"><figcaption><span>/etc/named.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">options &#123;</span><br><span class="line">  listen-on port 53 &#123; 10.4.7.12; &#125;;</span><br><span class="line">  directory 	&quot;/var/named&quot;;</span><br><span class="line">  dump-file 	&quot;/var/named/data/cache_dump.db&quot;;</span><br><span class="line">  statistics-file &quot;/var/named/data/named_stats.txt&quot;;</span><br><span class="line">  memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</span><br><span class="line">  allow-query     &#123; any; &#125;;</span><br><span class="line">  masterfile-format text;</span><br><span class="line">  /* </span><br><span class="line">   - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.</span><br><span class="line">   - If you are building a RECURSIVE (caching) DNS server, you need to enable </span><br><span class="line">     recursion. </span><br><span class="line">   - If your recursive DNS server has a public IP address, you MUST enable access </span><br><span class="line">     control to limit queries to your legitimate users. Failing to do so will</span><br><span class="line">     cause your server to become part of large scale DNS amplification </span><br><span class="line">     attacks. Implementing BCP38 within your network would greatly</span><br><span class="line">     reduce such attack surface </span><br><span class="line">  */</span><br><span class="line">  recursion yes;</span><br><span class="line"></span><br><span class="line">  dnssec-enable no;</span><br><span class="line">  dnssec-validation no;</span><br><span class="line"></span><br><span class="line">  /* Path to ISC DLV key */</span><br><span class="line">  bindkeys-file &quot;/etc/named.iscdlv.key&quot;;</span><br><span class="line"></span><br><span class="line">  managed-keys-directory &quot;/var/named/dynamic&quot;;</span><br><span class="line"></span><br><span class="line">  pid-file &quot;/run/named/named.pid&quot;;</span><br><span class="line">  session-keyfile &quot;/run/named/session.key&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">logging &#123;</span><br><span class="line">  channel default_debug &#123;</span><br><span class="line">    file &quot;data/named.run&quot;;</span><br><span class="line">    severity dynamic;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">zone &quot;.&quot; IN &#123;</span><br><span class="line">  type hint;</span><br><span class="line">  file &quot;named.ca&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">include &quot;/etc/named.rfc1912.zones&quot;;</span><br><span class="line">include &quot;/etc/named.root.key&quot;;</span><br></pre></td></tr></table></figure></p>
+<h1 id="修改主DNS主配置文件"><a href="#修改主DNS主配置文件" class="headerlink" title="修改主DNS主配置文件"></a>修改主DNS主配置文件</h1><h2 id="加入以下配置"><a href="#加入以下配置" class="headerlink" title="加入以下配置"></a>加入以下配置</h2><figure class="highlight plain"><figcaption><span>/etc/named.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">allow-transfer &#123; 10.4.7.12; &#125;;</span><br><span class="line">also-notify &#123; 10.4.7.12; &#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="检查配置并重启主DNS"><a href="#检查配置并重启主DNS" class="headerlink" title="检查配置并重启主DNS"></a>检查配置并重启主DNS</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># named-checkconf</span><br><span class="line"># systemctl restart named</span><br></pre></td></tr></table></figure>
+<h2 id="检查完全区域数据传送"><a href="#检查完全区域数据传送" class="headerlink" title="检查完全区域数据传送"></a>检查完全区域数据传送</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-12 ~]# dig -t axfr host.com @10.4.7.11</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-73.el7_6 &lt;&lt;&gt;&gt; -t axfr host.com @10.4.7.11</span><br><span class="line">;; global options: +cmd</span><br><span class="line">host.com.		600	IN	SOA	dns.host.com. dnsadmin.host.com. 2018121601 10800 900 604800 86400</span><br><span class="line">host.com.		600	IN	NS	ns1.host.com.</span><br><span class="line">HDSS7-11.host.com.	60	IN	A	10.4.7.11</span><br><span class="line">HDSS7-12.host.com.	60	IN	A	10.4.7.12</span><br><span class="line">ns1.host.com.		60	IN	A	10.4.7.11</span><br><span class="line">host.com.		600	IN	SOA	dns.host.com. dnsadmin.host.com. 2018121601 10800 900 604800 86400</span><br><span class="line">;; Query time: 0 msec</span><br><span class="line">;; SERVER: 10.4.7.11#53(10.4.7.11)</span><br><span class="line">;; WHEN: Sun Dec 16 14:16:01 CST 2018</span><br><span class="line">;; XFR size: 6 records (messages 1, bytes 220)</span><br></pre></td></tr></table></figure>
+<h1 id="辅助DNS上创建自定义正解区域配置"><a href="#辅助DNS上创建自定义正解区域配置" class="headerlink" title="辅助DNS上创建自定义正解区域配置"></a>辅助DNS上创建自定义正解区域配置</h1><figure class="highlight plain"><figcaption><span>/etc/named.rfc1912.zones</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;host.com&quot; IN &#123;</span><br><span class="line">  type  slave;</span><br><span class="line">  masters &#123; 10.4.7.11; &#125;;</span><br><span class="line">  file  &quot;slaves/host.com.zone&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="检查配置并启动辅助DNS"><a href="#检查配置并启动辅助DNS" class="headerlink" title="检查配置并启动辅助DNS"></a>检查配置并启动辅助DNS</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># named-checkconf</span><br><span class="line"># systemctl start named</span><br></pre></td></tr></table></figure>
+<h2 id="检查同步过来的区域数据库文件"><a href="#检查同步过来的区域数据库文件" class="headerlink" title="检查同步过来的区域数据库文件"></a>检查同步过来的区域数据库文件</h2><figure class="highlight plain"><figcaption><span>/var/named/slaves/host.com.zone</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-12 slaves]# ll</span><br><span class="line">-rw-r--r-- 1 named named 392 Feb 10 21:08 host.com.zone</span><br><span class="line">[root@hdss7-12 slaves]# cat host.com.zone </span><br><span class="line">$ORIGIN .</span><br><span class="line">$TTL 600	; 10 minutes</span><br><span class="line">host.com		IN SOA	dns.host.com. dnsadmin.host.com. (</span><br><span class="line">				2018121601 ; serial</span><br><span class="line">				10800      ; refresh (3 hours)</span><br><span class="line">				900        ; retry (15 minutes)</span><br><span class="line">				604800     ; expire (1 week)</span><br><span class="line">				86400      ; minimum (1 day)</span><br><span class="line">				)</span><br><span class="line">			NS	ns1.host.com.</span><br><span class="line">$ORIGIN host.com.</span><br><span class="line">$TTL 60	; 1 minute</span><br><span class="line">HDSS7-11		A	10.4.7.11</span><br><span class="line">HDSS7-12		A	10.4.7.12</span><br><span class="line">ns1			A	10.4.7.11</span><br></pre></td></tr></table></figure>
+<h2 id="检查解析是否正确"><a href="#检查解析是否正确" class="headerlink" title="检查解析是否正确"></a>检查解析是否正确</h2><h3 id="使用主DNS查询一个A记录"><a href="#使用主DNS查询一个A记录" class="headerlink" title="使用主DNS查询一个A记录"></a>使用主DNS查询一个A记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># dig -t A HDSS7-11.host.com @10.4.7.11 +short</span><br><span class="line">10.4.7.11</span><br></pre></td></tr></table></figure>
+<h3 id="使用辅助DNS查询一个A记录"><a href="#使用辅助DNS查询一个A记录" class="headerlink" title="使用辅助DNS查询一个A记录"></a>使用辅助DNS查询一个A记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># dig -t A HDSS7-11.host.com @10.4.7.12 +short</span><br><span class="line">10.4.7.11</span><br></pre></td></tr></table></figure>
+<h1 id="辅助DNS上创建自定义反解区域配置"><a href="#辅助DNS上创建自定义反解区域配置" class="headerlink" title="辅助DNS上创建自定义反解区域配置"></a>辅助DNS上创建自定义反解区域配置</h1><p>略</p>
+<h1 id="增加、删除、修改记录，并验证同步"><a href="#增加、删除、修改记录，并验证同步" class="headerlink" title="增加、删除、修改记录，并验证同步"></a>增加、删除、修改记录，并验证同步</h1><p><strong>注意</strong>：一定要手动修改主DNS上SOA记录里的serial值！</p>
+<h2 id="增加记录"><a href="#增加记录" class="headerlink" title="增加记录"></a>增加记录</h2><h2 id="删除记录"><a href="#删除记录" class="headerlink" title="删除记录"></a>删除记录</h2><h2 id="修改记录"><a href="#修改记录" class="headerlink" title="修改记录"></a>修改记录</h2><h1 id="再增加一个od-com的业务域，并验证主辅同步（复习）"><a href="#再增加一个od-com的业务域，并验证主辅同步（复习）" class="headerlink" title="再增加一个od.com的业务域，并验证主辅同步（复习）"></a>再增加一个od.com的业务域，并验证主辅同步（复习）</h1><h2 id="主DNS上增加自定义区域"><a href="#主DNS上增加自定义区域" class="headerlink" title="主DNS上增加自定义区域"></a>主DNS上增加自定义区域</h2><h2 id="主DNS上增加自定义区域数据库文件"><a href="#主DNS上增加自定义区域数据库文件" class="headerlink" title="主DNS上增加自定义区域数据库文件"></a>主DNS上增加自定义区域数据库文件</h2><h2 id="主DNS上增加自定义区域资源记录"><a href="#主DNS上增加自定义区域资源记录" class="headerlink" title="主DNS上增加自定义区域资源记录"></a>主DNS上增加自定义区域资源记录</h2><h2 id="检查配置并重启主DNS服务"><a href="#检查配置并重启主DNS服务" class="headerlink" title="检查配置并重启主DNS服务"></a>检查配置并重启主DNS服务</h2><h2 id="辅助DNS上增加自定义区域"><a href="#辅助DNS上增加自定义区域" class="headerlink" title="辅助DNS上增加自定义区域"></a>辅助DNS上增加自定义区域</h2><h2 id="检查完全区域数据传送-1"><a href="#检查完全区域数据传送-1" class="headerlink" title="检查完全区域数据传送"></a>检查完全区域数据传送</h2><h2 id="检查配置并重启辅助DNS服务"><a href="#检查配置并重启辅助DNS服务" class="headerlink" title="检查配置并重启辅助DNS服务"></a>检查配置并重启辅助DNS服务</h2><h2 id="验证主辅同步"><a href="#验证主辅同步" class="headerlink" title="验证主辅同步"></a>验证主辅同步</h2><h3 id="分别使用主DNS和辅助DNS查询新业务域的A记录"><a href="#分别使用主DNS和辅助DNS查询新业务域的A记录" class="headerlink" title="分别使用主DNS和辅助DNS查询新业务域的A记录"></a>分别使用主DNS和辅助DNS查询新业务域的A记录</h3><h3 id="在主DNS上新增一条A记录，并验证主辅同步"><a href="#在主DNS上新增一条A记录，并验证主辅同步" class="headerlink" title="在主DNS上新增一条A记录，并验证主辅同步"></a>在主DNS上新增一条A记录，并验证主辅同步</h3><h3 id="在主DNS上修改一条A记录，并验证主辅同步"><a href="#在主DNS上修改一条A记录，并验证主辅同步" class="headerlink" title="在主DNS上修改一条A记录，并验证主辅同步"></a>在主DNS上修改一条A记录，并验证主辅同步</h3><h3 id="在主DNS上删除一条A记录，并验证主辅同步"><a href="#在主DNS上删除一条A记录，并验证主辅同步" class="headerlink" title="在主DNS上删除一条A记录，并验证主辅同步"></a>在主DNS上删除一条A记录，并验证主辅同步</h3><h1 id="客户端配置DNS解析高可用"><a href="#客户端配置DNS解析高可用" class="headerlink" title="客户端配置DNS解析高可用"></a>客户端配置DNS解析高可用</h1><p>在客户端主机（以Linux主机为例，Windows和Mac操作系统略）配置主、辅DNS<br><figure class="highlight plain"><figcaption><span>/etc/resolv.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#cat /etc/resolv.conf </span><br><span class="line"># Generated by NetworkManager</span><br><span class="line">search host.com od.com</span><br><span class="line">nameserver 10.4.7.11</span><br><span class="line">nameserver 10.4.7.12</span><br></pre></td></tr></table></figure></p>
+<p>这样客户端高可用就配置好了，任意一个DNS服务器宕机也不会影响正常解析</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档5：DNS工具和rndc远程管理DNS实战/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stanley Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stanley's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/16/实验文档5：DNS工具和rndc远程管理DNS实战/" class="post-title-link" itemprop="url">实验文档5：DNS工具和rndc远程管理DNS实战</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-16 12:12:56" itemprop="dateCreated datePublished" datetime="2018-12-16T12:12:56+08:00">2018-12-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-01 16:59:44" itemprop="dateModified" datetime="2019-03-01T16:59:44+08:00">2019-03-01</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Web-DNS技术/" itemprop="url" rel="index"><span itemprop="name">Web DNS技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">5 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<blockquote class="blockquote-center"><p>欢迎加入王导的VIP学习qq群：==&gt;<a href="http://shang.qq.com/wpa/qunwpa?idkey=78869fddc5a661acb0639315eb52997c108de6625df5f0ee2f0372f176a032a6" target="_blank" rel="noopener"><font color="FF7F50">932194668</font></a>&lt;==</p>
+</blockquote>
+<hr>
+<h1 id="DNS管理工具"><a href="#DNS管理工具" class="headerlink" title="DNS管理工具"></a>DNS管理工具</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># yum install bind-utils -y</span><br></pre></td></tr></table></figure>
+<h2 id="工具一：nslookup"><a href="#工具一：nslookup" class="headerlink" title="工具一：nslookup"></a>工具一：nslookup</h2><p>Windows操作系统也有的一个常用工具</p>
+<h3 id="交互式"><a href="#交互式" class="headerlink" title="交互式"></a>交互式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#nslookup </span><br><span class="line">&gt; server localhost</span><br><span class="line">Default server: localhost</span><br><span class="line">Address: 127.0.0.1#53</span><br><span class="line">Default server: localhost</span><br><span class="line">Address: 127.0.0.1#53</span><br><span class="line">&gt; www.bkjf-inc.com</span><br><span class="line">Server:		localhost</span><br><span class="line">Address:	127.0.0.1#53</span><br><span class="line"></span><br><span class="line">Name:	www.bkjf-inc.com</span><br><span class="line">Address: 192.144.198.128</span><br><span class="line">-------以上是权威应答</span><br><span class="line">&gt; server 8.8.8.8</span><br><span class="line">Default server: 8.8.8.8</span><br><span class="line">Address: 8.8.8.8#53</span><br><span class="line">&gt; www.bkjf-inc.com</span><br><span class="line">Server:		8.8.8.8</span><br><span class="line">Address:	8.8.8.8#53</span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">Name:	www.bkjf-inc.com</span><br><span class="line">Address: 192.144.198.128</span><br><span class="line">-------以上是非权威应答</span><br></pre></td></tr></table></figure>
+<h3 id="非交互式"><a href="#非交互式" class="headerlink" title="非交互式"></a>非交互式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#nslookup www.baidu.com</span><br><span class="line">Server:		183.60.83.19</span><br><span class="line">Address:	183.60.83.19#53</span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">www.baidu.com	canonical name = www.a.shifen.com.</span><br><span class="line">Name:	www.a.shifen.com</span><br><span class="line">Address: 220.181.112.244</span><br><span class="line">Name:	www.a.shifen.com</span><br><span class="line">Address: 220.181.111.37</span><br></pre></td></tr></table></figure>
+<h2 id="工具二：host"><a href="#工具二：host" class="headerlink" title="工具二：host"></a>工具二：host</h2><p>简单粗暴的小工具<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#host -t A www.baidu.com</span><br><span class="line">www.baidu.com is an alias for www.a.shifen.com.</span><br><span class="line">www.a.shifen.com has address 220.181.112.244</span><br><span class="line">www.a.shifen.com has address 220.181.111.37</span><br></pre></td></tr></table></figure></p>
+<h2 id="工具三：dig"><a href="#工具三：dig" class="headerlink" title="工具三：dig"></a>工具三：dig</h2><p>功能强大的DNS工具，重点掌握<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#dig -t A www.baidu.com @localhost</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-73.el7_6 &lt;&lt;&gt;&gt; -t A www.baidu.com @localhost</span><br><span class="line">;; global options: +cmd</span><br><span class="line">;; Got answer:</span><br><span class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 46476</span><br><span class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 5, ADDITIONAL: 6</span><br><span class="line"></span><br><span class="line">;; OPT PSEUDOSECTION:</span><br><span class="line">; EDNS: version: 0, flags:; udp: 4096</span><br><span class="line">;; QUESTION SECTION:</span><br><span class="line">;www.baidu.com.			IN	A</span><br><span class="line"></span><br><span class="line">;; ANSWER SECTION:</span><br><span class="line">www.baidu.com.		1200	IN	CNAME	www.a.shifen.com.</span><br><span class="line">www.a.shifen.com.	300	IN	A	220.181.111.37</span><br><span class="line">www.a.shifen.com.	300	IN	A	220.181.112.244</span><br><span class="line"></span><br><span class="line">;; AUTHORITY SECTION:</span><br><span class="line">a.shifen.com.		1200	IN	NS	ns3.a.shifen.com.</span><br><span class="line">a.shifen.com.		1200	IN	NS	ns2.a.shifen.com.</span><br><span class="line">a.shifen.com.		1200	IN	NS	ns4.a.shifen.com.</span><br><span class="line">a.shifen.com.		1200	IN	NS	ns5.a.shifen.com.</span><br><span class="line">a.shifen.com.		1200	IN	NS	ns1.a.shifen.com.</span><br><span class="line"></span><br><span class="line">;; ADDITIONAL SECTION:</span><br><span class="line">ns5.a.shifen.com.	1200	IN	A	180.76.76.95</span><br><span class="line">ns1.a.shifen.com.	1200	IN	A	61.135.165.224</span><br><span class="line">ns3.a.shifen.com.	1200	IN	A	112.80.255.253</span><br><span class="line">ns4.a.shifen.com.	1200	IN	A	14.215.177.229</span><br><span class="line">ns2.a.shifen.com.	1200	IN	A	220.181.57.142</span><br><span class="line"></span><br><span class="line">;; Query time: 561 msec</span><br><span class="line">;; SERVER: 127.0.0.1#53(127.0.0.1)</span><br><span class="line">;; WHEN: Fri Mar 01 09:45:51 CST 2019</span><br><span class="line">;; MSG SIZE  rcvd: 271</span><br></pre></td></tr></table></figure></p>
+<p>常用参数：</p>
+<ul>
+<li>+[no]addition</li>
+<li>+short</li>
+</ul>
+<h2 id="工具四：nsupdate"><a href="#工具四：nsupdate" class="headerlink" title="工具四：nsupdate"></a>工具四：nsupdate</h2><p>不常用，需要在zone配置文件里声明<code>allow-update { acl; };</code></p>
+<h3 id="调整zone配置文件"><a href="#调整zone配置文件" class="headerlink" title="调整zone配置文件"></a>调整zone配置文件</h3><figure class="highlight plain"><figcaption><span>/etc/named.rfc1912.zones</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;bkjf-inc.com&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;bkjf-inc.com.zone&quot;;</span><br><span class="line">        allow-update &#123; 10.4.7.11/32; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>重启named服务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl restart named</span><br></pre></td></tr></table></figure></p>
+<h3 id="新增一条记录"><a href="#新增一条记录" class="headerlink" title="新增一条记录"></a>新增一条记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#nsupdate </span><br><span class="line">&gt; server 10.4.7.11</span><br><span class="line">&gt; update add update.bkjf-inc.com 60 A 10.4.7.11</span><br><span class="line">&gt; send</span><br><span class="line">&gt; quit</span><br></pre></td></tr></table></figure>
+<p>检查：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#nslookup update.bkjf-inc.com</span><br><span class="line">Server:		10.4.7.11</span><br><span class="line">Address:	10.4.7.11#53</span><br><span class="line"></span><br><span class="line">Name:	update.bkjf-inc.com</span><br><span class="line">Address: 10.4.7.11</span><br></pre></td></tr></table></figure></p>
+<h3 id="查看区域数据库文件"><a href="#查看区域数据库文件" class="headerlink" title="查看区域数据库文件"></a>查看区域数据库文件</h3><figure class="highlight plain"><figcaption><span>/var/named/</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-rw-r--r-- 1 root  root   335 Feb 28 10:57 bkjf-inc.com.zone</span><br><span class="line">-rw-r--r-- 1 named named  733 Mar  1 09:54 bkjf-inc.com.zone.jnl</span><br><span class="line">#file bkjf-inc.com.zone.jnl </span><br><span class="line">bkjf-inc.com.zone.jnl: data</span><br></pre></td></tr></table></figure>
+<p>产生了一个jnl的数据文件，不能使用文本编辑器打开</p>
+<blockquote>
+<p>jnl文件（journal文件）是BIND9动态更新的时候记录更新内容所生成的日志文件。</p>
+</blockquote>
+<h3 id="删除一条记录"><a href="#删除一条记录" class="headerlink" title="删除一条记录"></a>删除一条记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#nsupdate </span><br><span class="line">&gt; server 10.4.7.11</span><br><span class="line">&gt; update delete update.bkjf-inc.com</span><br><span class="line">&gt; send</span><br><span class="line">&gt; quit</span><br></pre></td></tr></table></figure>
+<p>检查<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#nslookup update.bkjf-inc.com</span><br><span class="line">Server:		10.4.7.11</span><br><span class="line">Address:	10.4.7.11#53</span><br><span class="line"></span><br><span class="line">** server can&apos;t find update.bkjf-inc.com: NXDOMAIN</span><br></pre></td></tr></table></figure></p>
+<h3 id="更新一条记录"><a href="#更新一条记录" class="headerlink" title="更新一条记录"></a>更新一条记录</h3><p>不支持直接更新，需要先执行删除，再新增</p>
+<h3 id="nsupdate使用小结："><a href="#nsupdate使用小结：" class="headerlink" title="nsupdate使用小结："></a>nsupdate使用小结：</h3><ul>
+<li>优点<ul>
+<li>命令简单，便于记忆</li>
+<li>不用手动变更SOA的serial序列号，自动滚动</li>
+<li>不需要重启/重载BIND9服务/配置，生效快</li>
+<li>可以通过配置acl实现远程管理</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>jnl文件无法使用文本文件的方式打开</li>
+<li>只能依赖完全区域传送查看所有区域的记录</li>
+<li>更新操作复杂，先删再增</li>
+<li>远程管理有安全隐患，需要加强审计</li>
+<li>动态域在rndc管理上多一步</li>
+</ul>
+</li>
+</ul>
+<h1 id="rndc远程管理DNS"><a href="#rndc远程管理DNS" class="headerlink" title="rndc远程管理DNS"></a>rndc远程管理DNS</h1><h2 id="生成rndc-key"><a href="#生成rndc-key" class="headerlink" title="生成rndc-key"></a>生成rndc-key</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#rndc-confgen -r /dev/urandom</span><br><span class="line"># Start of rndc.conf</span><br><span class="line">key &quot;rndc-key&quot; &#123;</span><br><span class="line">	algorithm hmac-md5;</span><br><span class="line">	secret &quot;MFM4AocpN0lcoL4fN2lA6Q==&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">options &#123;</span><br><span class="line">	default-key &quot;rndc-key&quot;;</span><br><span class="line">	default-server 127.0.0.1;</span><br><span class="line">	default-port 953;</span><br><span class="line">&#125;;</span><br><span class="line"># End of rndc.conf</span><br><span class="line"></span><br><span class="line"># Use with the following in named.conf, adjusting the allow list as needed:</span><br><span class="line"># key &quot;rndc-key&quot; &#123;</span><br><span class="line"># 	algorithm hmac-md5;</span><br><span class="line"># 	secret &quot;MFM4AocpN0lcoL4fN2lA6Q==&quot;;</span><br><span class="line"># &#125;;</span><br><span class="line"># </span><br><span class="line"># controls &#123;</span><br><span class="line"># 	inet 127.0.0.1 port 953</span><br><span class="line"># 		allow &#123; 127.0.0.1; &#125; keys &#123; &quot;rndc-key&quot;; &#125;;</span><br><span class="line"># &#125;;</span><br><span class="line"># End of named.conf</span><br></pre></td></tr></table></figure>
+<h2 id="把rndc-key和controls配置到bind的主配置文件的options段里"><a href="#把rndc-key和controls配置到bind的主配置文件的options段里" class="headerlink" title="把rndc-key和controls配置到bind的主配置文件的options段里"></a>把rndc-key和controls配置到bind的主配置文件的options段里</h2><figure class="highlight plain"><figcaption><span>/etc/named.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">key &quot;rndc-key&quot; &#123;</span><br><span class="line">	algorithm hmac-md5;</span><br><span class="line">	secret &quot;MFM4AocpN0lcoL4fN2lA6Q==&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">controls &#123;</span><br><span class="line">      inet 10.4.7.11 port 953</span><br><span class="line">               allow &#123; 10.4.7.11;10.4.7.12; &#125; keys &#123; &quot;rndc-key&quot;; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>这里要配置一下controls段的acl，限定好哪些主机可以使用rndc管理DNS服务</p>
+<h2 id="重启bind9服务"><a href="#重启bind9服务" class="headerlink" title="重启bind9服务"></a>重启bind9服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl restart named</span><br></pre></td></tr></table></figure>
+<p>rndc的服务端监听在953端口，检查一下端口是否起来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># netstat -luntp|grep 953</span><br><span class="line">tcp        0      0 10.4.7.11:953           0.0.0.0:*               LISTEN      11136/named</span><br></pre></td></tr></table></figure></p>
+<h2 id="在远程管理主机上安装bind"><a href="#在远程管理主机上安装bind" class="headerlink" title="在远程管理主机上安装bind"></a>在远程管理主机上安装bind</h2><p>rndc命令在bind包里，所以远程管理主机需要安装bind（不需要启动named）</p>
+<h2 id="在远程管理主机上做rndc-conf"><a href="#在远程管理主机上做rndc-conf" class="headerlink" title="在远程管理主机上做rndc.conf"></a>在远程管理主机上做rndc.conf</h2><p>使用rndc进行远程管理的主机上，都需要配置rndc.conf，且rndc-key要和DNS服务器上的key一致<br><figure class="highlight plain"><figcaption><span>/etc/rndc.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">key &quot;rndc-key&quot; &#123;</span><br><span class="line">	algorithm hmac-md5;</span><br><span class="line">	secret &quot;MFM4AocpN0lcoL4fN2lA6Q==&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">options &#123;</span><br><span class="line">	default-key &quot;rndc-key&quot;;   </span><br><span class="line">	default-server 10.4.7.11;</span><br><span class="line">	default-port 953;   </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用rndc命令远程管理DNS"><a href="#使用rndc命令远程管理DNS" class="headerlink" title="使用rndc命令远程管理DNS"></a>使用rndc命令远程管理DNS</h2><h3 id="查询DNS服务状态（可以取值做监控）"><a href="#查询DNS服务状态（可以取值做监控）" class="headerlink" title="查询DNS服务状态（可以取值做监控）"></a>查询DNS服务状态（可以取值做监控）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#rndc status </span><br><span class="line">version: 9.9.4-RedHat-9.9.4-73.el7_6 &lt;id:8f9657aa&gt;</span><br><span class="line">CPUs found: 2</span><br><span class="line">worker threads: 2</span><br><span class="line">UDP listeners per interface: 2</span><br><span class="line">number of zones: 105</span><br><span class="line">debug level: 0</span><br><span class="line">xfers running: 0</span><br><span class="line">xfers deferred: 0</span><br><span class="line">soa queries in progress: 0</span><br><span class="line">query logging is OFF</span><br><span class="line">recursive clients: 0/0/1000</span><br><span class="line">tcp clients: 0/100</span><br><span class="line">server is up and running</span><br></pre></td></tr></table></figure>
+<h3 id="管理静态域-allow-update-none"><a href="#管理静态域-allow-update-none" class="headerlink" title="管理静态域(allow-update { none; };)"></a>管理静态域(allow-update { none; };)</h3><figure class="highlight plain"><figcaption><span>静态域zone文件</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;od.com&quot; IN &#123;</span><br><span class="line">	type master;</span><br><span class="line">	file &quot;od.com.zone&quot;;</span><br><span class="line">	allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>增、删、改一条记录后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># rndc reload od.com</span><br><span class="line">zone reload up-to-date</span><br></pre></td></tr></table></figure></p>
+<h3 id="管理动态域（allow-update-10-4-7-11-）"><a href="#管理动态域（allow-update-10-4-7-11-）" class="headerlink" title="管理动态域（allow-update { 10.4.7.11; };）"></a>管理动态域（allow-update { 10.4.7.11; };）</h3><figure class="highlight plain"><figcaption><span>动态域zone文件</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;host.com&quot; IN &#123;</span><br><span class="line">	type master;</span><br><span class="line">	file &quot;host.com.zone&quot;;</span><br><span class="line">	allow-update &#123; 10.4.7.11; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>增、删、改一条记录后<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#rndc reload host.com</span><br><span class="line">rndc: &apos;reload&apos; failed: dynamic zone</span><br></pre></td></tr></table></figure></p>
+<p>直接reload会报错，需要先<code>freeze</code>再<code>thaw</code>才行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#rndc freeze host.com</span><br><span class="line">#rndc thaw host.com</span><br><span class="line">The zone reload and thaw was successful.</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档6：智能DNS实战/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stanley Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stanley's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/16/实验文档6：智能DNS实战/" class="post-title-link" itemprop="url">实验文档6：智能DNS实战</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-16 10:12:56" itemprop="dateCreated datePublished" datetime="2018-12-16T10:12:56+08:00">2018-12-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-04 09:36:43" itemprop="dateModified" datetime="2019-03-04T09:36:43+08:00">2019-03-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Web-DNS技术/" itemprop="url" rel="index"><span itemprop="name">Web DNS技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.8k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">3 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<blockquote class="blockquote-center"><p>欢迎加入王导的VIP学习qq群：==&gt;<a href="http://shang.qq.com/wpa/qunwpa?idkey=78869fddc5a661acb0639315eb52997c108de6625df5f0ee2f0372f176a032a6" target="_blank" rel="noopener"><font color="FF7F50">932194668</font></a>&lt;==</p>
+</blockquote>
+<hr>
+<h1 id="BIND9的acl访问控制列表"><a href="#BIND9的acl访问控制列表" class="headerlink" title="BIND9的acl访问控制列表"></a>BIND9的acl访问控制列表</h1><h2 id="4个内置acl"><a href="#4个内置acl" class="headerlink" title="4个内置acl"></a>4个内置acl</h2><ul>
+<li>any：任何主机</li>
+<li>none：没有主机</li>
+<li>localhost：本机</li>
+<li>localnet：本地子网所有IP</li>
+</ul>
+<h2 id="自定义acl"><a href="#自定义acl" class="headerlink" title="自定义acl"></a>自定义acl</h2><h3 id="简单acl"><a href="#简单acl" class="headerlink" title="简单acl"></a>简单acl</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">acl &quot;someips&quot; &#123;                               //定义一个名为someips的ACL  </span><br><span class="line">  10.0.0.1; 192.168.23.1; 192.168.23.15;      //包含3个单个IP  </span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="复杂acl"><a href="#复杂acl" class="headerlink" title="复杂acl"></a>复杂acl</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">acl &quot;complex&quot; &#123;             //定义一个名为complex的ACL  </span><br><span class="line">  &quot;someips&quot;;                //可以嵌套包含其他ACL  </span><br><span class="line">  10.0.15.0/24;             //包含10.0.15.0子网中的所有IP  </span><br><span class="line">  !10.0.16.1/24;            //非10.0.16.1子网的IP  </span><br><span class="line">  &#123;10.0.17.1;10.0.18.2;&#125;;   //包含了一个IP组  </span><br><span class="line">  localhost；               //本地网络接口IP（含实际接口IP和127.0.0.1）  </span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="使用acl"><a href="#使用acl" class="headerlink" title="使用acl"></a>使用acl</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">allow-update &#123; &quot;someips&quot;; &#125;;</span><br><span class="line">allow-transfer &#123; &quot;complex&quot;; &#125;;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h1 id="BIND9的view视图功能"><a href="#BIND9的view视图功能" class="headerlink" title="BIND9的view视图功能"></a>BIND9的view视图功能</h1><p>view语句定义了视图功能。视图是BIND9提供的强大的新功能，允许DNS服务器根据客户端的不同，有区别地回答DNS查询，每个视图定义了一个被特定客户端子集见到的DNS名称空间。这个功能在一台主机上运行多个形式上独立的DNS服务器时特别有用。</p>
+<h2 id="view的语法范例"><a href="#view的语法范例" class="headerlink" title="view的语法范例"></a>view的语法范例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">view view_name [class] &#123;</span><br><span class="line">    match-clients &#123; address_match_list &#125; ;</span><br><span class="line">    match-destinations &#123; address_match_list &#125; ;</span><br><span class="line">    match-recursive-only &#123; yes_or_no &#125; ;</span><br><span class="line">    [ view_option; ...]</span><br><span class="line">    [ zone-statistics yes_or_no ; ]</span><br><span class="line">    [ zone_statement; ...]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="view配置范例1：按照不同业务环境解析"><a href="#view配置范例1：按照不同业务环境解析" class="headerlink" title="view配置范例1：按照不同业务环境解析"></a>view配置范例1：按照不同业务环境解析</h2><p><strong>注：</strong>以下是内网DNS的view使用范例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">acl &quot;env-test&quot; &#123;</span><br><span class="line">    10.4.7.11;</span><br><span class="line">&#125;;</span><br><span class="line">acl &quot;env-prd&quot; &#123;</span><br><span class="line">    10.4.7.12;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">view &quot;env-test&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;env-test&quot;; &#125;;</span><br><span class="line">    recursion yes;</span><br><span class="line">    zone &quot;od.com&quot; &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;env-test.od.com.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;env-prd&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;env-prd&quot;; &#125;;</span><br><span class="line">    recursion yes;</span><br><span class="line">    zone &quot;od.com&quot; &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;env-prd.od.com.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;default&quot; &#123;</span><br><span class="line">    match-clients &#123; any; &#125;;</span><br><span class="line">    recursion yes;</span><br><span class="line">    zone &quot;.&quot; IN &#123;</span><br><span class="line">	type hint;</span><br><span class="line">	file &quot;named.ca&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">    include &quot;/etc/named.rfc1912.zones&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="view配置范例2：智能DNS"><a href="#view配置范例2：智能DNS" class="headerlink" title="view配置范例2：智能DNS"></a>view配置范例2：智能DNS</h2><p><strong>注：</strong>以下特指公网智能DNS配置范例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//电信IP访问控制列表</span><br><span class="line">acl &quot;telecomip&quot;&#123; telecom_IP; ... &#125;;</span><br><span class="line">//联通IP访问控制列表</span><br><span class="line">acl &quot;netcomip&quot;&#123; netcom_IP; ... &#125;;</span><br><span class="line">view &quot;telecom&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;telecomip&quot;; &#125;;</span><br><span class="line">    zone &quot;ZONE_NAME&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;ZONE_NAME.telecom.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;netcom&quot; &#123;</span><br><span class="line">    match-clients &#123; &quot;netcomip&quot;; &#125;;</span><br><span class="line">    zone &quot;ZONE_NAME&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;ZONE_NAME.netcom.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">view &quot;default&quot; &#123;</span><br><span class="line">    match-clients &#123; any; &#125;;</span><br><span class="line">    zone &quot;ZONE_NAME&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;ZONE_NAME.zone&quot;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档7：bind-chroot和dnssec技术实战/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Stanley Wang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Stanley's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/12/16/实验文档7：bind-chroot和dnssec技术实战/" class="post-title-link" itemprop="url">实验文档7：bind-chroot和dnssec技术实战</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-16 08:12:56" itemprop="dateCreated datePublished" datetime="2018-12-16T08:12:56+08:00">2018-12-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-25 09:36:54" itemprop="dateModified" datetime="2019-03-25T09:36:54+08:00">2019-03-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Web-DNS技术/" itemprop="url" rel="index"><span itemprop="name">Web DNS技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">17k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">15 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<blockquote class="blockquote-center"><p>欢迎加入王导的VIP学习qq群：==&gt;<a href="http://shang.qq.com/wpa/qunwpa?idkey=78869fddc5a661acb0639315eb52997c108de6625df5f0ee2f0372f176a032a6" target="_blank" rel="noopener"><font color="FF7F50">932194668</font></a>&lt;==</p>
+</blockquote>
+<hr>
+<h1 id="安装部署bind-chroot"><a href="#安装部署bind-chroot" class="headerlink" title="安装部署bind-chroot"></a>安装部署bind-chroot</h1><h2 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h2><p>服务器：腾讯云主机，有公网IP<br>OS：CentOS Linux release 7.4.1708 (Core)<br>bind-chroot：bind-chroot-9.9.4-73.el7_6.x86_64</p>
+<h2 id="yum-安装"><a href="#yum-安装" class="headerlink" title="yum 安装"></a>yum 安装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># yum install bind-chroot -y</span><br><span class="line">=============================================================================================================================================================</span><br><span class="line"></span><br><span class="line"> Package                                 Arch                            Version                                      Repository                        Size</span><br><span class="line">=============================================================================================================================================================</span><br><span class="line"></span><br><span class="line">Installing:</span><br><span class="line"> bind-chroot                             x86_64                          32:9.9.4-73.el7_6                            updates                           88 k</span><br><span class="line">Installing for dependencies:</span><br><span class="line"> bind                                    x86_64                          32:9.9.4-73.el7_6                            updates                          1.8 M</span><br><span class="line">Updating for dependencies:</span><br><span class="line"> bind-libs                               x86_64                          32:9.9.4-73.el7_6                            updates                          1.0 M</span><br><span class="line"> bind-libs-lite                          x86_64                          32:9.9.4-73.el7_6                            updates                          741 k</span><br><span class="line"> bind-license                            noarch                          32:9.9.4-73.el7_6                            updates                           87 k</span><br><span class="line"> bind-utils                              x86_64                          32:9.9.4-73.el7_6                            updates                          206 k</span><br><span class="line"></span><br><span class="line">Transaction Summary</span><br><span class="line">=============================================================================================================================================================</span><br><span class="line"></span><br><span class="line">Install  1 Package  (+1 Dependent package)</span><br><span class="line">Upgrade             ( 4 Dependent packages)</span><br><span class="line"></span><br><span class="line">Installed:</span><br><span class="line">  bind-chroot.x86_64 32:9.9.4-73.el7_6                                                                                                                       </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Dependency Installed:</span><br><span class="line">  bind.x86_64 32:9.9.4-73.el7_6                                                                                                                              </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Dependency Updated:</span><br><span class="line">  bind-libs.x86_64 32:9.9.4-73.el7_6  bind-libs-lite.x86_64 32:9.9.4-73.el7_6  bind-license.noarch 32:9.9.4-73.el7_6  bind-utils.x86_64 32:9.9.4-73.el7_6 </span><br><span class="line"></span><br><span class="line">Complete!</span><br></pre></td></tr></table></figure>
+<h2 id="配置bind-chroot"><a href="#配置bind-chroot" class="headerlink" title="配置bind-chroot"></a>配置bind-chroot</h2><p>bind-chroot本质上是使用chroot方式给bind软件换了个“根”，这时bind软件的“根”在/var/named/chroot下，弄懂这一点，配置起来就跟BIND9没什么区别了<br>把yum安装的bind-chroot在/etc下的产生的配置文件硬链接到/var/named/chroot/etc下<br><figure class="highlight plain"><figcaption><span>/var/named/chroot/etc/</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos ~]# cd /var/named/chroot/etc/</span><br><span class="line">[root@VM_0_13_centos etc]# ls /etc/named</span><br><span class="line">named/               named.conf           named.iscdlv.key     named.rfc1912.zones  named.root.key       </span><br><span class="line">[root@VM_0_13_centos etc]# ln /etc/named.* .</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><figcaption><span>/var/named/chroot/var/named</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos named]# ln /var/named/named.* .</span><br><span class="line">[root@VM_0_13_centos named]# mkdir data/ dynamic/ slaves/ dnssec-key/</span><br><span class="line">[root@VM_0_13_centos named]# chgrp -R named *</span><br><span class="line">[root@VM_0_13_centos named]# ll</span><br><span class="line">drwxrwx--- 2 root  named 4096 Feb 27 18:30 data</span><br><span class="line">drwxr-xr-x 3 root  named 4096 Feb 28 14:31 dnssec-key</span><br><span class="line">drwxrwx--- 2 root  named 4096 Feb 28 14:33 dynamic</span><br><span class="line">-rw-r----- 2 root  named 2281 May 22  2017 named.ca</span><br><span class="line">-rw-r----- 2 root  named  152 Dec 15  2009 named.empty</span><br><span class="line">-rw-r----- 2 root  named  152 Jun 21  2007 named.localhost</span><br><span class="line">-rw-r----- 2 root  named  168 Dec 15  2009 named.loopback</span><br><span class="line">drwxrwx--- 2 root  named 4096 Jan 30 01:23 slaves</span><br></pre></td></tr></table></figure>
+<h2 id="etc-named-conf主配置文件"><a href="#etc-named-conf主配置文件" class="headerlink" title="/etc/named.conf主配置文件"></a>/etc/named.conf主配置文件</h2><p>编辑主配置文件，这里把53端口开放到公网<br><figure class="highlight plain"><figcaption><span>/etc/named.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">options &#123;</span><br><span class="line">	listen-on port 53 &#123; any; &#125;;</span><br><span class="line">	directory 	&quot;/var/named&quot;;</span><br><span class="line">	dump-file 	&quot;/var/named/data/cache_dump.db&quot;;</span><br><span class="line">	statistics-file &quot;/var/named/data/named_stats.txt&quot;;</span><br><span class="line">	memstatistics-file &quot;/var/named/data/named_mem_stats.txt&quot;;</span><br><span class="line">	recursing-file  &quot;/var/named/data/named.recursing&quot;;</span><br><span class="line">	secroots-file   &quot;/var/named/data/named.secroots&quot;;</span><br><span class="line">	allow-query     &#123; any; &#125;;</span><br><span class="line"></span><br><span class="line">	/* </span><br><span class="line">	 - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.</span><br><span class="line">	 - If you are building a RECURSIVE (caching) DNS server, you need to enable </span><br><span class="line">	   recursion. </span><br><span class="line">	 - If your recursive DNS server has a public IP address, you MUST enable access </span><br><span class="line">	   control to limit queries to your legitimate users. Failing to do so will</span><br><span class="line">	   cause your server to become part of large scale DNS amplification </span><br><span class="line">	   attacks. Implementing BCP38 within your network would greatly</span><br><span class="line">	   reduce such attack surface </span><br><span class="line">	*/</span><br><span class="line">	recursion no;</span><br><span class="line"></span><br><span class="line">	dnssec-enable yes;</span><br><span class="line">	dnssec-validation yes;</span><br><span class="line">	dnssec-lookaside auto;</span><br><span class="line"></span><br><span class="line">	/* Path to ISC DLV key */</span><br><span class="line">	bindkeys-file &quot;/etc/named.iscdlv.key&quot;;</span><br><span class="line"></span><br><span class="line">	managed-keys-directory &quot;/var/named/dynamic&quot;;</span><br><span class="line">	</span><br><span class="line">	pid-file &quot;/run/named/named.pid&quot;;</span><br><span class="line">	session-keyfile &quot;/run/named/session.key&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">logging &#123;</span><br><span class="line">        channel default_debug &#123;</span><br><span class="line">                file &quot;data/named.run&quot;;</span><br><span class="line">                severity dynamic;</span><br><span class="line">        &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">zone &quot;.&quot; IN &#123;</span><br><span class="line">	type hint;</span><br><span class="line">	file &quot;named.ca&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">include &quot;/etc/named.rfc1912.zones&quot;;</span><br><span class="line">include &quot;/etc/named.root.key&quot;;</span><br></pre></td></tr></table></figure></p>
+<h1 id="使用dnssec技术维护一个业务域"><a href="#使用dnssec技术维护一个业务域" class="headerlink" title="使用dnssec技术维护一个业务域"></a>使用dnssec技术维护一个业务域</h1><p>在公网上使用BIND9维护的业务域，最好使用dnssec技术对该域添加数字签名<br>DNSSEC（DNS Security Extension）—-DNS安全扩展，主要是为了解决DNS欺骗和缓存污染问题而设计的一种安全机制。</p>
+<p><a href="https://www.cloudxns.net/Support/detail/id/1309.html" target="_blank" rel="noopener">DNSSEC技术参考文献1</a><br><a href="https://blog.csdn.net/zhu_tianwei/article/details/45082015" target="_blank" rel="noopener">DNSSEC技术参考文献2</a></p>
+<h2 id="打开dnssec支持选项"><a href="#打开dnssec支持选项" class="headerlink" title="打开dnssec支持选项"></a>打开dnssec支持选项</h2><figure class="highlight plain"><figcaption><span>/etc/named.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dnssec-enable yes;</span><br><span class="line">dnssec-validation yes;</span><br><span class="line">dnssec-lookaside auto;</span><br></pre></td></tr></table></figure>
+<h2 id="配置一个业务域bkjf-inc-com"><a href="#配置一个业务域bkjf-inc-com" class="headerlink" title="配置一个业务域bkjf-inc.com"></a>配置一个业务域bkjf-inc.com</h2><figure class="highlight plain"><figcaption><span>/etc/named.rfc1912.zones</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">zone &quot;bkjf-inc.com&quot; IN &#123;</span><br><span class="line">        type master;</span><br><span class="line">        file &quot;bkjf-inc.com.zone&quot;;</span><br><span class="line">        key-directory &quot;dnssec-key/bkjf-inc.com&quot;;</span><br><span class="line">        inline-signing yes;</span><br><span class="line">        auto-dnssec maintain;</span><br><span class="line">        allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="创建数字签名证书"><a href="#创建数字签名证书" class="headerlink" title="创建数字签名证书"></a>创建数字签名证书</h2><figure class="highlight plain"><figcaption><span>/var/named/chroot/var/named/dnssec-key</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos dnssec-key]# mkdir bkjf-inc.com</span><br><span class="line">[root@VM_0_13_centos dnssec-key]# chgrp named bkjf-inc.com</span><br><span class="line">[root@VM_0_13_centos dnssec-key]# cd bkjf-inc.com</span><br><span class="line">[root@VM_0_13_centos bkjf-inc.com]# dnssec-keygen -a RSASHA256 -b 1024 bkjf-inc.com</span><br><span class="line">Generating key pair..................................++++++ .++++++ </span><br><span class="line">Kbkjf-inc.com.+008+53901</span><br><span class="line">[root@VM_0_13_centos bkjf-inc.com]# dnssec-keygen -a RSASHA256 -b 2048 -f KSK bkjf-inc.com                                                                           KSK bkjf-inc.com</span><br><span class="line">Generating key pair..........................................................................................+++ ............................................</span><br><span class="line">.....+++ </span><br><span class="line">Kbkjf-inc.com.+008+40759</span><br><span class="line"></span><br><span class="line">[root@VM_0_13_centos bkjf-inc.com]# chgrp named *</span><br><span class="line">[root@VM_0_13_centos bkjf-inc.com]# chmod g+r *.private</span><br><span class="line">[root@VM_0_13_centos bkjf-inc.com]# ll</span><br><span class="line">total 16</span><br><span class="line">-rw-r--r-- 1 root named  607 Feb 28 14:10 Kbkjf-inc.com.+008+40759.key</span><br><span class="line">-rw-r----- 1 root named 1776 Feb 28 14:10 Kbkjf-inc.com.+008+40759.private</span><br><span class="line">-rw-r--r-- 1 root named  433 Feb 28 14:10 Kbkjf-inc.com.+008+53901.key</span><br><span class="line">-rw-r----- 1 root named 1012 Feb 28 14:10 Kbkjf-inc.com.+008+53901.private</span><br></pre></td></tr></table></figure>
+<p>这里如果生成密钥的速度很慢，需要yum安装一下haveged软件并开启<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start haveged.service</span><br></pre></td></tr></table></figure></p>
+<h2 id="创建区域数据库文件"><a href="#创建区域数据库文件" class="headerlink" title="创建区域数据库文件"></a>创建区域数据库文件</h2><figure class="highlight plain"><figcaption><span>/var/named/chroot/var/named/bkjf-inc.com.zone</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos named]# cat bkjf-inc.com.zone</span><br><span class="line">$TTL 600	; 10 minutes</span><br><span class="line">@               IN SOA	ns1.bkjf-inc.com. 87527941.qq.com. (</span><br><span class="line">                2018121605 ; serial</span><br><span class="line">                10800      ; refresh (3 hours)</span><br><span class="line">                900        ; retry (15 minutes)</span><br><span class="line">                604800     ; expire (1 week)</span><br><span class="line">                86400      ; minimum (1 day)</span><br><span class="line">                )</span><br><span class="line">                NS     ns1.bkjf-inc.com.</span><br><span class="line">                NS     ns2.bkjf-inc.com.</span><br><span class="line">$ORIGIN bkjf-inc.com.</span><br><span class="line">$TTL 60	; 1 minute</span><br><span class="line">ns1             A     192.144.198.128</span><br><span class="line">ns2             A     192.144.198.128</span><br><span class="line">www             A     192.144.198.128</span><br><span class="line">eshop           CNAME www</span><br></pre></td></tr></table></figure>
+<h2 id="启动bind-chroot服务"><a href="#启动bind-chroot服务" class="headerlink" title="启动bind-chroot服务"></a>启动bind-chroot服务</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># systemctl start named-chroot</span><br></pre></td></tr></table></figure>
+<h2 id="自动生成了签名zone"><a href="#自动生成了签名zone" class="headerlink" title="自动生成了签名zone"></a>自动生成了签名zone</h2><p>如果启动成功且配置无误，应该自动生成了带签名的zone<br><figure class="highlight plain"><figcaption><span>/var/named/chroot/var/named/</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos named]# ll</span><br><span class="line">total 60</span><br><span class="line">-rw-r--r-- 1 root  named  507 Feb 28 14:34 bkjf-inc.com.zone</span><br><span class="line">-rw-r--r-- 1 named named  512 Feb 28 14:26 bkjf-inc.com.zone.jbk</span><br><span class="line">-rw-r--r-- 1 named named  742 Feb 28 14:35 bkjf-inc.com.zone.jnl</span><br><span class="line">-rw-r--r-- 1 named named 4102 Feb 28 14:44 bkjf-inc.com.zone.signed</span><br><span class="line">-rw-r--r-- 1 named named 7481 Feb 28 14:35 bkjf-inc.com.zone.signed.jnl</span><br></pre></td></tr></table></figure></p>
+<p>检查签名区需要用到完全区域传送命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos named]# dig -t AXFR bkjf-inc.com @localhost</span><br><span class="line"></span><br><span class="line">; &lt;&lt;&gt;&gt; DiG 9.9.4-RedHat-9.9.4-73.el7_6 &lt;&lt;&gt;&gt; -t AXFR bkjf-inc.com @localhost</span><br><span class="line">;; global options: +cmd</span><br><span class="line">bkjf-inc.com.		600	IN	SOA	ns1.bkjf-inc.com. 87527941.qq.com. 2018121608 10800 900 604800 86400</span><br><span class="line">bkjf-inc.com.		86400	IN	RRSIG	NSEC 8 2 86400 20190330063503 20190228053503 53901 bkjf-inc.com. 0fyLJXxaDOI+RWnYjK2tGpd6WgbWmgeIADtjpPQFQLrv1X9fuDLi2MFR q0+csg5P22eVUdasKi3q5tMmFW8GZtLEBBVtOtSba3/FvtoitvyBGcG6 KJ155dPbhEFe/eR0/JhWtFsIsyj/UHtgELB4eGYJYCeEI+WzUopT7voz 4UE=</span><br><span class="line">bkjf-inc.com.		86400	IN	NSEC	eshop.bkjf-inc.com. NS SOA RRSIG NSEC DNSKEY TYPE65534</span><br><span class="line">bkjf-inc.com.		600	IN	RRSIG	NS 8 2 600 20190330063017 20190228053309 53901 bkjf-inc.com. Y/T0m4p0yNrJwJiHc0mjDgit/9E4h7MXPb5F2WgBd+huXYgL0pS0vOb3 c2aRvHHW/zngPjShOfy3sYY5203SzPS15tN6E/RAs36/I33sZE7jZBFo 9q0KjEdKHNsoC9XISSdbLPCX879/B1rKZcmhpPNmhpAK6P351nWWgd9L jtU=</span><br><span class="line">bkjf-inc.com.		600	IN	RRSIG	SOA 8 2 600 20190330063503 20190228053503 53901 bkjf-inc.com. eE3nKlCmAZrjJ3DwdzPStYmrC38X6VCqCxIc6otLJDX65Uk2uSqGSPre WIu16zEsbuuxq7/38ABrupQNwkPAgaSaiLIRC/000PXzKsUPhll0xO4x u9tLg2LBRATQ+4dHpKtLsoBTX0nXVHlz09YeAAA82r5wyQye2/ebesxH +A4=</span><br><span class="line">bkjf-inc.com.		0	IN	RRSIG	TYPE65534 8 2 0 20190330054441 20190228053309 53901 bkjf-inc.com. sEX7jpdTbUZ3hlIR2CRWHbgceAQFVOVKnVl6CXvyQhavIFjUyBMMhXTw hKYwXd2Hc0LGg9koWJqlt0oYS8YbXacKbeBUrLovmcbYP46Uhm05zaVo jswG7oYYsYDE3ekbl5ImnAEyjksSNOgk8if/WoUvXfF5QH6Rdl+6Q3qG cEI=</span><br><span class="line">bkjf-inc.com.		600	IN	RRSIG	DNSKEY 8 2 600 20190330063309 20190228053309 53901 bkjf-inc.com. rUGjMTxmbthB6UbmemoorQOfuen8u0xeOosl7lPRNLV2Hk7KsAZzUD2/ tRAJaY9NRZ1JhZHkmX/N5hncuVpPxZnrp8UB7qOoairqgjA73IFGoT0F 00KIU0FZaqsQAbBSzpzfbwr9KVbn1hTAq6/5Q/wrWZvQOASMYrF5Xhr9 lW4=</span><br><span class="line">bkjf-inc.com.		600	IN	RRSIG	DNSKEY 8 2 600 20190330063309 20190228053309 40759 bkjf-inc.com. lBXWXbTshdeH/oOkBGdwIspet0ABbhUZfzAXUjOP3ivCMW5sse3ZayEA qPe6mZncURqomWNA/xQKemoJJjtlAwc5F4CjmtrUierdy3EVVKS0NFnz 9L3PxiJcOxl1VVtSBX+XAOPa0xkS3cpEbFVOym4NaKsoLgcqKKBjjBu4 dhWoXoxXk7PE5fogo9/BM0heGI4XpnixUSTbucMw4bcnNYPY0qKUBs2o alt1CvrGz78oOO10//pXpw/ml89UwWo28/FDvxeuXS7soeImDRklTLlE xV/Q3//v7o73ZosAdSR+9xFdcZtVs43Jjo3Cy8WL1Zjz6BdRd59Fyu6h WghEKg==</span><br><span class="line">bkjf-inc.com.		0	IN	TYPE65534 \# 5 08D28D0001</span><br><span class="line">bkjf-inc.com.		0	IN	TYPE65534 \# 5 089F370001</span><br><span class="line">bkjf-inc.com.		600	IN	DNSKEY	256 3 8 AwEAAflXAWLXAVJUEj29iidwVvZALuQr03hLn1bEl81XDtD63H7wwHS9 i9fNDYL0q0FkRDkuzXEQpb3UUleu/RYtSd9w6Ads0RWNUyB6X1E4Djmv sPwFwvo570svZSVky2rjEHnySgVI2ywqhcRYLMKjxE6pXuzXrqecQcF2 qrMq2xmJ</span><br><span class="line">bkjf-inc.com.		600	IN	DNSKEY	257 3 8 AwEAAbxFYlbq+R8y/hGg/xL8xDBasZGYtgPOqVd3bP68p98YHsFwHyG8 u3svatzRoq8STNjKKZEluDC2bcUIn9/mRHyorTYPtwyePxPEgVE4yhBy 9xqD4ES+ty7kuHOUz/WEHdNdYRhYyHe+SGf4dHnmU49pHIBCE8xFX6fs t270webjuXs4Pt6qRlyoFC3XmpRDiMNVwtM+doUxo/MRK4mw5zTeHyyf dFLVOvE3mW/ZKgBfnrsj0zE71bnD5nTxJIjDv1bUppbiRy5RK40jPhHu zaa3quxg1yS/BceYcjJpZJUc3LS55HGzatfuK799KvukuDKf7u71ylW+ 5ynT7Sxhbt0=</span><br><span class="line">bkjf-inc.com.		600	IN	NS	ns1.bkjf-inc.com.</span><br><span class="line">bkjf-inc.com.		600	IN	NS	ns2.bkjf-inc.com.</span><br><span class="line">eshop.bkjf-inc.com.	86400	IN	RRSIG	NSEC 8 3 86400 20190330063503 20190228053503 53901 bkjf-inc.com. dHM2PhYs7BVuhD//iGhcwPZGZmHDkBCfWKju6ZZlvSx3I+QmWWvVdKCj 8YCw2AkWhgARxFfRMzhxRwDjgEgHhxUr4UGPH9+kJpvGi+UpFBVoBvPw iL43qCn/4J2f6URuAY8Dcq0DFpR0QLVJgIXBZpyhUYu5hZNWI2tzfyhO GlM=</span><br><span class="line">eshop.bkjf-inc.com.	86400	IN	NSEC	ns1.bkjf-inc.com. CNAME RRSIG NSEC</span><br><span class="line">eshop.bkjf-inc.com.	60	IN	RRSIG	CNAME 8 3 60 20190330063503 20190228053503 53901 bkjf-inc.com. 9ONt81AjpHFrM8YwDm7pQAg62oDBgaNzdtDIqtBHt5h/BPl83fOP/dOp P0Xi+y/OsFjDzHBSBDU4sy3fJwHBqm8uuMc6m33pIZfTq15fxFXF+2hU ift1bc0b0dk/L7ANZ5haEsDcl+hSVjwru2o2ISJtvp5zySZ61pdMvA6y ktg=</span><br><span class="line">eshop.bkjf-inc.com.	60	IN	CNAME	www.bkjf-inc.com.</span><br><span class="line">ns1.bkjf-inc.com.	60	IN	RRSIG	A 8 3 60 20190330063017 20190228053309 53901 bkjf-inc.com. 9MUZhsTxlmn5B6QXg/iCQoFyilRh8H4OJcTgpu1KgSyMTiBoEwJGdhIx k2XimlJZr9/MrSeRbuLwMZOnwFJ7w9fcIunrYHiE1T71y0BcLnQOKaJf SkJI5VKUam80+J6unkscCj0i/Y1kXTjXWLODKsZzw4+zLz5cGJk6hvsn XP4=</span><br><span class="line">ns1.bkjf-inc.com.	86400	IN	RRSIG	NSEC 8 3 86400 20190330063017 20190228053309 53901 bkjf-inc.com. EFeX2LsEd/flN2/5lCgKlSTtC93WH0LDw9GW1RAlLIfxFAptPsXkmy7y B0Blt7tOuaxA/cTNbnFZBnyo8G3YW90LnYagqeuNzl+90gjUxsbbhE4f pTkQkRXRsvcagYDKQjs9nkN1SAF13SagnupR8D2crHADICjy8RHjHtgA byM=</span><br><span class="line">ns1.bkjf-inc.com.	86400	IN	NSEC	ns2.bkjf-inc.com. A RRSIG NSEC</span><br><span class="line">ns1.bkjf-inc.com.	60	IN	A	192.144.198.128</span><br><span class="line">ns2.bkjf-inc.com.	60	IN	RRSIG	A 8 3 60 20190330063017 20190228053309 53901 bkjf-inc.com. N2ssp0Eh6SyHBYHskedxUpfIp29DETt2g74sCuhrXwMuwLjOdVwuB02i /LqzDLyDbVZnMZncqoQ367AV2b/ttU/FJZcHiAlI2tLRTxVuNyj/E2YN BIDAtIqueNdJzsyE7n1yz9sPcsTrOidrIqqbM3qom5tMQvdo+2jrnhR3 UoY=</span><br><span class="line">ns2.bkjf-inc.com.	86400	IN	RRSIG	NSEC 8 3 86400 20190330063017 20190228053309 53901 bkjf-inc.com. sTTRnUQxPBbeAG0WrQpn4iK/U62D2s8umLwx8w8bx+bwxQdhR8Yyz8Ke tSelkffgctCtyUi5i7ibSTnvUJTcvOcvWWteMOQfQqXJmAngADx87cba /M+OJqRwp8tu3PEniPpTYN3msGSEFILyxLCO/2cyBzK+8jhFFKYyMOn/ ViQ=</span><br><span class="line">ns2.bkjf-inc.com.	86400	IN	NSEC	www.bkjf-inc.com. A RRSIG NSEC</span><br><span class="line">ns2.bkjf-inc.com.	60	IN	A	192.144.198.128</span><br><span class="line">www.bkjf-inc.com.	60	IN	RRSIG	A 8 3 60 20190330063017 20190228053309 53901 bkjf-inc.com. aKI5N4y6eqN/xunC7+4vYa3cSHyXcW533iGA6/q34/ahvq0sTgYN36aF oBO0t8fRvwS3chZaPxwuqbk6hGSW+tRhJ8x/Nnwtbcn004W0ZxI1k046 JW/ePLhq1Cw2GPHXJTsfCjYmAOcwssX2yUv6q9/vocXx/mipuTMljrId yhE=</span><br><span class="line">www.bkjf-inc.com.	86400	IN	RRSIG	NSEC 8 3 86400 20190330063017 20190228053309 53901 bkjf-inc.com. 0q3C+xMKE1p586q+p8U4AHGiNjzzI899TcmL2P4x8x1B7rkc22rsakX9 AnNFAzkPOTVLr81GQtBraI1K6El2QDKcPkE9+0e+34tirpuUzVlzjYB2 f4WHGxTscdOMpCestqnmspQpmXm37+EBWS0alBBq3Db8T+F/3CSEGRS7 Ao0=</span><br><span class="line">www.bkjf-inc.com.	86400	IN	NSEC	bkjf-inc.com. A RRSIG NSEC</span><br><span class="line">www.bkjf-inc.com.	60	IN	A	192.144.198.128</span><br><span class="line">bkjf-inc.com.		600	IN	SOA	ns1.bkjf-inc.com. 87527941.qq.com. 2018121608 10800 900 604800 86400</span><br><span class="line">;; Query time: 1 msec</span><br><span class="line">;; SERVER: 127.0.0.1#53(127.0.0.1)</span><br><span class="line">;; WHEN: Thu Feb 28 15:22:46 CST 2019</span><br><span class="line">;; XFR size: 31 records (messages 1, bytes 3433)</span><br></pre></td></tr></table></figure></p>
+<p>这里看到了每个记录都附带了一个<code>RRSIG</code>记录，说明已经进行了数字签名</p>
+<h2 id="检查本地解析"><a href="#检查本地解析" class="headerlink" title="检查本地解析"></a>检查本地解析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos named]# dig -t A www.bkjf-inc.com @localhost +dnssec +short</span><br><span class="line">192.144.198.128</span><br><span class="line">A 8 3 60 20190330063017 20190228053309 53901 bkjf-inc.com. aKI5N4y6eqN/xunC7+4vYa3cSHyXcW533iGA6/q34/ahvq0sTgYN36aF oBO0t8fRvwS3chZaPxwuqbk6hGSW+tRhJ8x/Nnwtbcn004W0ZxI1k046 JW/ePLhq1Cw2GPHXJTsfCjYmAOcwssX2yUv6q9/vocXx/mipuTMljrId yhE=</span><br></pre></td></tr></table></figure>
+<h2 id="DS记录"><a href="#DS记录" class="headerlink" title="DS记录"></a>DS记录</h2><p>在生成证书的目录对<code>ZSK</code>执行<code>dnssec-dsfromkey</code>命令，得到<code>bkjf-inc.com</code>的DS记录，这里我们使用比较长的那个<br><figure class="highlight plain"><figcaption><span>/var/named/chroot/var/named/dnssec-key/bkjf-inc.com</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_0_13_centos bkjf-inc.com]#  dnssec-dsfromkey `grep -l zone-signing *key`</span><br><span class="line">bkjf-inc.com. IN DS 53901 8 1 5E13F6C0ECEE84248C2543693CE7D8617920983B</span><br><span class="line">bkjf-inc.com. IN DS 53901 8 2 3006068B784AFBBC67133F123A0C389514959FCB6CAB0032DB200F08E6E5C384</span><br></pre></td></tr></table></figure></p>
+<p>其中：</p>
+<ul>
+<li>53901：关键标签，用于标识域名的DNSSEC记录，一个小于65535的整数值</li>
+<li>8：生成签名的加密算法，8对应RSA/SHA-256</li>
+<li>2：构建摘要的加密算法，2对应SHA-256</li>
+<li>最后一段：摘要值，就是DS记录值</li>
+</ul>
+<p>参考万网（阿里云）上关于dnssec配置的文档：<a href="https://help.aliyun.com/document_detail/101717.html?spm=a2c4g.11186623.6.626.37c01e9bzbyBGq" target="_blank" rel="noopener">参考文档</a></p>
+<p>DS记录需要通过运营商提交到上级DNS的信任锚中，这里是通过万网的配置页面，提交到<code>.com</code>域</p>
+<p><strong>注意：</strong>要在阿里云上将该域名的dns服务器指向自定义DNS服务器：<a href="https://help.aliyun.com/knowledge_detail/39846.html" target="_blank" rel="noopener">参考文档</a></p>
+<h2 id="后续维护"><a href="#后续维护" class="headerlink" title="后续维护"></a>后续维护</h2><p>dnssec需要定期轮转，所以需要经常变更签名，其中</p>
+<ul>
+<li>ZSK轮转<blockquote>
+<p>建议每年轮转</p>
+</blockquote>
+</li>
+<li>KSK轮转<blockquote>
+<p>建议更新ssl证书后尽快轮转？</p>
+</blockquote>
+</li>
+</ul>
+<p>轮转方法：</p>
+<ul>
+<li><p>ZSK(zone-signing key)</p>
+<figure class="highlight plain"><figcaption><span>/var/named/chroot/var/named/dnssec-key/bkjf-inc.com</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cd /var/named/chroot/var/named/dnssec-key/bkjf-inc.com</span><br><span class="line">$ dnssec-settime -I yyyy0101 -D yyyy0201 Kbkjf-inc.com.+008+53901</span><br><span class="line">$ dnssec-keygen -S Kbkjf-inc.com.+008+53901</span><br><span class="line">$ chgrp bind *</span><br><span class="line">$ chmod g+r *.private</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>KSK轮转(key-signing key)</p>
+<figure class="highlight plain"><figcaption><span>/var/named/chroot/var/named/dnssec-key/bkjf-inc.com</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cd /var/named/chroot/var/named/dnssec-key/bkjf-inc.com</span><br><span class="line">$ dnssec-settime -I yyyy0101 -D yyyy0201 Kbkjf-inc.com.+008+40759</span><br><span class="line">$ dnssec-keygen -S Kbkjf-inc.com.+008+40759</span><br><span class="line">$ chgrp bind *</span><br><span class="line">$ chmod g+r *.private</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>注意：</strong>KSK轮转需要同步在万网上更新DS记录</p>
+<h2 id="在任意客户端验证解析"><a href="#在任意客户端验证解析" class="headerlink" title="在任意客户端验证解析"></a>在任意客户端验证解析</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#dig -t A www.bkjf-inc.com @8.8.8.8 +dnssec +short</span><br><span class="line">192.144.198.128</span><br><span class="line">A 8 3 60 20190330063017 20190228053309 53901 bkjf-inc.com. aKI5N4y6eqN/xunC7+4vYa3cSHyXcW533iGA6/q34/ahvq0sTgYN36aF oBO0t8fRvwS3chZaPxwuqbk6hGSW+tRhJ8x/Nnwtbcn004W0ZxI1k046 JW/ePLhq1Cw2GPHXJTsfCjYmAOcwssX2yUv6q9/vocXx/mipuTMljrId yhE=</span><br><span class="line"></span><br><span class="line">#dig CNAME eshop.bkjf-inc.com @8.8.8.8 +dnssec +short</span><br><span class="line">www.bkjf-inc.com.</span><br><span class="line">CNAME 8 3 60 20190330063503 20190228053503 53901 bkjf-inc.com. 9ONt81AjpHFrM8YwDm7pQAg62oDBgaNzdtDIqtBHt5h/BPl83fOP/dOp P0Xi+y/OsFjDzHBSBDU4sy3fJwHBqm8uuMc6m33pIZfTq15fxFXF+2hU ift1bc0b0dk/L7ANZ5haEsDcl+hSVjwru2o2ISJtvp5zySZ61pdMvA6y ktg=</span><br></pre></td></tr></table></figure>
+<h2 id="在第三方网站验证"><a href="#在第三方网站验证" class="headerlink" title="在第三方网站验证"></a>在第三方网站验证</h2><p><a href="https://en.internet.nl/site/www.bkjf-inc.com/473349/" target="_blank" rel="noopener">https://en.internet.nl/site/www.bkjf-inc.com/473349/</a></p>
+<h2 id="浏览器插件"><a href="#浏览器插件" class="headerlink" title="浏览器插件"></a>浏览器插件</h2><p><a href="https://www.dnssec-validator.cz/" target="_blank" rel="noopener">https://www.dnssec-validator.cz/</a></p>
+<p><a href="https://ftp.isc.org/isc/kb-files/DNSSEC-QR-B4.pdf" target="_blank" rel="noopener">参考文献</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://StanleyWang-GitHub.github.io/2018/12/16/实验文档8：企业级Web DNS实战/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -400,7 +1373,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-03-08 11:21:53" itemprop="dateModified" datetime="2019-03-08T11:21:53+08:00">2019-03-08</time>
+                <time title="修改时间：2019-04-12 17:00:46" itemprop="dateModified" datetime="2019-04-12T17:00:46+08:00">2019-04-12</time>
               
             
           </span>
@@ -446,7 +1419,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">23k</span>
+                <span title="本文字数">24k</span>
               
 
               
@@ -495,7 +1468,7 @@
 <h3 id="配mysql的root密码"><a href="#配mysql的root密码" class="headerlink" title="配mysql的root密码"></a>配mysql的root密码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-11 mysql]# mysqladmin -uroot password 123456</span><br></pre></td></tr></table></figure>
 <h3 id="导入namedmanager的数据库脚本"><a href="#导入namedmanager的数据库脚本" class="headerlink" title="导入namedmanager的数据库脚本"></a>导入namedmanager的数据库脚本</h3><figure class="highlight plain"><figcaption><span>/usr/share/namedmanager/resources/autoinstall.pl</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-11 ~]# cd /usr/share/namedmanager/resources/</span><br><span class="line">[root@hdss7-11 resources]# ./autoinstall.pl </span><br><span class="line">autoinstall.pl</span><br><span class="line"></span><br><span class="line">This script setups the NamedManager database components:</span><br><span class="line"> * NamedManager MySQL user</span><br><span class="line"> * NamedManager database</span><br><span class="line"> * NamedManager configuration files</span><br><span class="line"></span><br><span class="line">THIS SCRIPT ONLY NEEDS TO BE RUN FOR THE VERY FIRST INSTALL OF NAMEDMANAGER.</span><br><span class="line">DO NOT RUN FOR ANY OTHER REASON</span><br><span class="line"></span><br><span class="line">Please enter MySQL root password (if any): 123456</span><br><span class="line"></span><br><span class="line">输入123456</span><br><span class="line"></span><br><span class="line">Searching ../sql/ for latest install schema...</span><br><span class="line">../sql//version_20131222_install.sql is the latest file and will be used for the install.</span><br><span class="line">Importing file ../sql//version_20131222_install.sql</span><br><span class="line">Creating user...</span><br><span class="line">Updating configuration file...</span><br><span class="line">DB installation complete!</span><br><span class="line"></span><br><span class="line">You can now login with the default username/password of setup/setup123 at http://localhost/namedmanager</span><br></pre></td></tr></table></figure>
 <h2 id="配置namedmanager"><a href="#配置namedmanager" class="headerlink" title="配置namedmanager"></a>配置namedmanager</h2><h3 id="config-php，增加一条配置"><a href="#config-php，增加一条配置" class="headerlink" title="config.php，增加一条配置"></a>config.php，增加一条配置</h3><figure class="highlight plain"><figcaption><span>/etc/namedmanager/config.php</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$_SERVER[&apos;HTTPS&apos;] = &quot;TRUE&quot;;</span><br></pre></td></tr></table></figure>
-<h3 id="config-bind-php，修改以下三条配置"><a href="#config-bind-php，修改以下三条配置" class="headerlink" title="config-bind.php，修改以下三条配置"></a>config-bind.php，修改以下三条配置</h3><figure class="highlight plain"><figcaption><span>/etc/namedmanager/config-bind.php</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$config[&quot;api_url&quot;]              = &quot;http://dns-manager.od.com/namedmanager&quot;;     // Application Install Location</span><br><span class="line">$config[&quot;api_server_name&quot;]      = &quot;dns-manager.od.com&quot;;                         // Name of the DNS server (important: part of the authentication process)</span><br><span class="line">$config[&quot;api_auth_key&quot;]         = &quot;verycloud&quot;;                                  // API authentication key</span><br></pre></td></tr></table></figure>
+<h3 id="config-bind-php，修改以下三条配置"><a href="#config-bind-php，修改以下三条配置" class="headerlink" title="config-bind.php，修改以下三条配置"></a>config-bind.php，修改以下三条配置</h3><figure class="highlight plain"><figcaption><span>/etc/namedmanager/config-bind.php</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$config[&quot;api_url&quot;]              = &quot;http://dns-manager.od.com/namedmanager&quot;;     // Application Install Location</span><br><span class="line">$config[&quot;api_server_name&quot;]      = &quot;dns-manager.od.com&quot;;                         // Name of the DNS server (important: part of the authentication process)</span><br><span class="line">$config[&quot;api_auth_key&quot;]         = &quot;verycloud&quot;;                                  // API authentication key</span><br><span class="line">$config[&quot;log_file&quot;]             = &quot;/var/log/namedmanager_bind_configwriter&quot;;</span><br></pre></td></tr></table></figure>
 <h3 id="php-ini，修改一条配置"><a href="#php-ini，修改一条配置" class="headerlink" title="php.ini，修改一条配置"></a>php.ini，修改一条配置</h3><figure class="highlight plain"><figcaption><span>/etc/php.ini</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">; How many GET/POST/COOKIE input variables may be accepted</span><br><span class="line">max_input_vars = 10000</span><br></pre></td></tr></table></figure>
 <h3 id="绑host（临时）"><a href="#绑host（临时）" class="headerlink" title="绑host（临时）"></a>绑host（临时）</h3><figure class="highlight plain"><figcaption><span>/etc/hosts</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.4.7.11   dns-manager.od.com</span><br></pre></td></tr></table></figure>
 <h3 id="配apache"><a href="#配apache" class="headerlink" title="配apache"></a>配apache</h3><figure class="highlight plain"><figcaption><span>/etc/httpd/conf/httpd.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Listen 10.4.7.11:8080</span><br><span class="line">ServerName dns-manager.od.com</span><br><span class="line">&lt;Directory /&gt;</span><br><span class="line">    AllowOverride none</span><br><span class="line">    allow from all</span><br><span class="line">    #Require all denied</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure>
@@ -933,6 +1906,7 @@
 <h2 id="配置DNS主辅同步"><a href="#配置DNS主辅同步" class="headerlink" title="配置DNS主辅同步"></a>配置DNS主辅同步</h2><p>略</p>
 <h2 id="配置客户端的DNS服务器"><a href="#配置客户端的DNS服务器" class="headerlink" title="配置客户端的DNS服务器"></a>配置客户端的DNS服务器</h2><figure class="highlight plain"><figcaption><span>/etc/resolv.conf</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Generated by NetworkManager</span><br><span class="line">search od.com host.com</span><br><span class="line">nameserver 10.4.7.11</span><br><span class="line">nameserver 10.4.7.12</span><br></pre></td></tr></table></figure>
 <p>把所有客户端绑定的临时hosts删除<br><figure class="highlight plain"><figcaption><span>/etc/hosts</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#10.4.7.11   dns-manager.od.com</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://www.jianshu.com/p/2c1c081cc521" target="_blank" rel="noopener">配置客户端DNS服务器的小技巧</a></p>
 <h1 id="用户系统及操作审计功能"><a href="#用户系统及操作审计功能" class="headerlink" title="用户系统及操作审计功能"></a>用户系统及操作审计功能</h1><h2 id="用户系统"><a href="#用户系统" class="headerlink" title="用户系统"></a>用户系统</h2><p>可以创建不同的管理员用户</p>
 <h3 id="User-Management选项卡"><a href="#User-Management选项卡" class="headerlink" title="User Management选项卡"></a>User Management选项卡</h3><p>该页面下可以查看所有的系统用户，并可以进行用户管理</p>
 <h3 id="Create-a-new-User-Account-增加用户"><a href="#Create-a-new-User-Account-增加用户" class="headerlink" title="Create a new User Account 增加用户"></a>Create a new User Account 增加用户</h3><h4 id="User-Details"><a href="#User-Details" class="headerlink" title="User Details"></a>User Details</h4><ul>
@@ -1337,7 +2311,7 @@
 <h2 id="多行代码"><a href="#多行代码" class="headerlink" title="多行代码"></a>多行代码</h2><div class="tabs" id="多行代码"><ul class="nav-tabs"><li class="tab active"><a href="#多行代码-1">效果</a></li><li class="tab"><a href="#多行代码-2">代码</a></li></ul><div class="tab-content"><div class="tab-pane active" id="多行代码-1"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for (list in $lists);do</span><br><span class="line">    echo $list</span><br><span class="line">done</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="多行代码-2"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">for (list in $lists);do</span><br><span class="line">    echo $list</span><br><span class="line">done</span><br><span class="line">```</span><br></pre></td></tr></table></figure></div></div></div>
 <h1 id="超链接"><a href="#超链接" class="headerlink" title="超链接"></a>超链接</h1><h2 id="行内式超链接"><a href="#行内式超链接" class="headerlink" title="行内式超链接"></a>行内式超链接</h2><div class="tabs" id="行内式"><ul class="nav-tabs"><li class="tab active"><a href="#行内式-1">效果</a></li><li class="tab"><a href="#行内式-2">代码</a></li></ul><div class="tab-content"><div class="tab-pane active" id="行内式-1"><p>不带title：<br>欢迎来到<a href="https://blog.stanley.wang" target="_blank" rel="noopener">我的博客</a><br>带title：<br>欢迎来到<a href="https://blog.stanley.wang" title="Stanley&#39;s Blog" target="_blank" rel="noopener">我的博客</a></p></div><div class="tab-pane" id="行内式-2"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">不带title：</span><br><span class="line">欢迎来到[我的博客](<a href="https://blog.stanley.wang\" target="_blank" rel="noopener">https://blog.stanley.wang\</a>)</span><br><span class="line">带title：</span><br><span class="line">欢迎来到[我的博客](<a href="https://blog.stanley.wang" target="_blank" rel="noopener">https://blog.stanley.wang</a> &quot;Stanley&apos;s Blog&quot;)</span><br></pre></td></tr></table></figure></div></div></div>
 <h2 id="自动超链接"><a href="#自动超链接" class="headerlink" title="自动超链接"></a>自动超链接</h2><div class="tabs" id="自动"><ul class="nav-tabs"><li class="tab active"><a href="#自动-1">效果</a></li><li class="tab"><a href="#自动-2">代码</a></li></ul><div class="tab-content"><div class="tab-pane active" id="自动-1"><p><a href="https://blog.stanley.wang" target="_blank" rel="noopener">https://blog.stanley.wang</a></p>
-<p><a href="mailto:&#x73;&#116;&#97;&#x6e;&#108;&#x65;&#x79;&#x2e;&#x77;&#x61;&#x6e;&#103;&#46;&#109;&#x40;&#x71;&#113;&#46;&#99;&#x6f;&#x6d;" target="_blank" rel="noopener">&#x73;&#116;&#97;&#x6e;&#108;&#x65;&#x79;&#x2e;&#x77;&#x61;&#x6e;&#103;&#46;&#109;&#x40;&#x71;&#113;&#46;&#99;&#x6f;&#x6d;</a></p></div><div class="tab-pane" id="自动-2"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\&lt;<a href="https://blog.stanley.wang\" target="_blank" rel="noopener">https://blog.stanley.wang\</a>&gt;</span><br><span class="line">\&lt;<a href="mailto:stanley.wang.m@qq.com" target="_blank" rel="noopener">stanley.wang.m@qq.com</a>\&gt;</span><br></pre></td></tr></table></figure></div></div></div>
+<p><a href="mailto:&#x73;&#x74;&#97;&#x6e;&#108;&#x65;&#121;&#46;&#119;&#97;&#x6e;&#x67;&#x2e;&#109;&#x40;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;" target="_blank" rel="noopener">&#x73;&#x74;&#97;&#x6e;&#108;&#x65;&#121;&#46;&#119;&#97;&#x6e;&#x67;&#x2e;&#109;&#x40;&#x71;&#x71;&#46;&#x63;&#x6f;&#x6d;</a></p></div><div class="tab-pane" id="自动-2"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\&lt;<a href="https://blog.stanley.wang\" target="_blank" rel="noopener">https://blog.stanley.wang\</a>&gt;</span><br><span class="line">\&lt;<a href="mailto:stanley.wang.m@qq.com" target="_blank" rel="noopener">stanley.wang.m@qq.com</a>\&gt;</span><br></pre></td></tr></table></figure></div></div></div>
 <h2 id="锚点超链接"><a href="#锚点超链接" class="headerlink" title="锚点超链接"></a>锚点超链接</h2><p>暂不支持锚点超链接</p>
 <h1 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h1><h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><div class="tabs" id="公式"><ul class="nav-tabs"><li class="tab active"><a href="#公式-1">效果</a></li><li class="tab"><a href="#公式-2">代码</a></li></ul><div class="tab-content"><div class="tab-pane active" id="公式-1"><p>When $a \ne 0$, there are two solutions to $ax^2$ + bx + c = 0 and they are： $$x= {-b \pm \sqrt{b^2-4ac} \over 2a}$$</p></div><div class="tab-pane" id="公式-2"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">When $a \ne 0$, there are two solutions to $ax^2$ + bx + c = 0 and they are： $$x= &#123;-b \pm \sqrt&#123;b^2-4ac&#125; \over 2a&#125;$$</span><br></pre></td></tr></table></figure></div></div></div>
 <h2 id="语法规范"><a href="#语法规范" class="headerlink" title="语法规范"></a>语法规范</h2><h3 id="呈现位置"><a href="#呈现位置" class="headerlink" title="呈现位置"></a>呈现位置</h3><ul>
@@ -3130,7 +4104,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-count">20</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -3149,7 +4123,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">3</span>
+                      
+                    
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3228,7 +4204,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">95k</span>
+    <span title="站点总字数">280k</span>
   
 
   
@@ -3237,7 +4213,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:27</span>
+    <span title="站点阅读时长">4:14</span>
   
 </div>
 
@@ -3690,6 +4666,14 @@
 
   
   
+    
+      
+    
+      
+    
+      
+    
+      
     
       
     

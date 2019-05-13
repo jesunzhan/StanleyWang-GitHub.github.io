@@ -3187,7 +3187,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-10 19:15:27" itemprop="dateModified" datetime="2019-05-10T19:15:27+08:00">2019-05-10</time>
+                <time title="修改时间：2019-05-13 10:39:00" itemprop="dateModified" datetime="2019-05-13T10:39:00+08:00">2019-05-13</time>
               
             
           </span>
@@ -3233,7 +3233,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">67k</span>
+                <span title="本文字数">68k</span>
               
 
               
@@ -3902,6 +3902,7 @@
 </blockquote>
 </li>
 </ul>
+<div class="tabs" id="k8s-dashboard"><ul class="nav-tabs"><li class="tab active"><a href="#k8s-dashboard-1">K8S-Cluster</a></li><li class="tab"><a href="#k8s-dashboard-2">K8S-Node</a></li><li class="tab"><a href="#k8s-dashboard-3">K8S-Deployment</a></li><li class="tab"><a href="#k8s-dashboard-4">K8S-Container</a></li></ul><div class="tab-content"><div class="tab-pane active" id="k8s-dashboard-1"><p>见附件</p></div><div class="tab-pane" id="k8s-dashboard-2"><p>见附件</p></div><div class="tab-pane" id="k8s-dashboard-3"><p>见附件</p></div><div class="tab-pane" id="k8s-dashboard-4"><p>见附件</p></div></div></div>
 <h3 id="配置自定义dashboard"><a href="#配置自定义dashboard" class="headerlink" title="配置自定义dashboard"></a>配置自定义dashboard</h3><p>根据Prometheus数据源里的数据，配置如下dashboard：</p>
 <ul>
 <li>etcd dashboard</li>
@@ -3910,7 +3911,7 @@
 <li>JMX dashboard</li>
 <li>blackbox dashboard</li>
 </ul>
-<div class="tabs" id="grafana-dashboard"><ul class="nav-tabs"><li class="tab active"><a href="#grafana-dashboard-1">ETCD</a></li><li class="tab"><a href="#grafana-dashboard-2">TRAEFIK</a></li><li class="tab"><a href="#grafana-dashboard-3">GENERIC</a></li><li class="tab"><a href="#grafana-dashboard-4">JMX</a></li></ul><div class="tab-content"><div class="tab-pane active" id="grafana-dashboard-1"><p>见附件</p></div><div class="tab-pane" id="grafana-dashboard-2"><p>见附件</p></div><div class="tab-pane" id="grafana-dashboard-3"><p>见附件</p></div><div class="tab-pane" id="grafana-dashboard-4"><p>见附件</p></div></div></div>
+<div class="tabs" id="grafana-dashboard"><ul class="nav-tabs"><li class="tab active"><a href="#grafana-dashboard-1">ETCD</a></li><li class="tab"><a href="#grafana-dashboard-2">TRAEFIK</a></li><li class="tab"><a href="#grafana-dashboard-3">GENERIC</a></li><li class="tab"><a href="#grafana-dashboard-4">JMX</a></li><li class="tab"><a href="#grafana-dashboard-5">BlackBox</a></li></ul><div class="tab-content"><div class="tab-pane active" id="grafana-dashboard-1"><p>见附件</p></div><div class="tab-pane" id="grafana-dashboard-2"><p>见附件</p></div><div class="tab-pane" id="grafana-dashboard-3"><p>见附件</p></div><div class="tab-pane" id="grafana-dashboard-4"><p>见附件</p></div><div class="tab-pane" id="grafana-dashboard-5"><p>见附件</p></div></div></div>
 <h1 id="使用ELK-Stack收集kubernetes集群内的应用日志"><a href="#使用ELK-Stack收集kubernetes集群内的应用日志" class="headerlink" title="使用ELK Stack收集kubernetes集群内的应用日志"></a>使用ELK Stack收集kubernetes集群内的应用日志</h1><h2 id="部署ElasticSearch"><a href="#部署ElasticSearch" class="headerlink" title="部署ElasticSearch"></a>部署ElasticSearch</h2><p><a href="https://www.elastic.co/" target="_blank" rel="noopener">官网</a><br><a href="https://github.com/elastic/elasticsearch" target="_blank" rel="noopener">官方github地址</a><br><a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.15.tar.gz" target="_blank" rel="noopener">下载地址</a><br><code>HDSS7-12.host.com</code>上：</p>
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plain"><figcaption><span>/opt/src</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-12 src]# ls -l|grep elasticsearch-5.6.15.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  72262257 Jan 30 15:18 elasticsearch-5.6.15.tar.gz</span><br><span class="line">[root@hdss7-12 src]# tar xf elasticsearch-5.6.15.tar.gz -C /opt</span><br><span class="line">[root@hdss7-12 src]# ln -s /opt/elasticsearch-5.6.15/ /opt/elasticsearch</span><br></pre></td></tr></table></figure>
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="elasticsearch-yml"><a href="#elasticsearch-yml" class="headerlink" title="elasticsearch.yml"></a>elasticsearch.yml</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-12 src]# mkdir -p /data/elasticsearch/&#123;data,logs&#125;</span><br><span class="line">[root@hdss7-12 elasticsearch]# vi config/elasticsearch.yml</span><br><span class="line">cluster.name: es.od.com</span><br><span class="line">node.name: hdss7-12.host.com</span><br><span class="line">path.data: /data/elasticsearch/data</span><br><span class="line">path.logs: /data/elasticsearch/logs</span><br><span class="line">bootstrap.memory_lock: true</span><br><span class="line">network.host: 10.4.7.12</span><br><span class="line">http.port: 9200</span><br></pre></td></tr></table></figure>

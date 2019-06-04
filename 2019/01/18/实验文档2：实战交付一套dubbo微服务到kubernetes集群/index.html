@@ -122,7 +122,7 @@
 <meta property="og:image" content="https://stanleywang-github.github.io/images/jenkins-firstbuild.png">
 <meta property="og:image" content="https://stanleywang-github.github.io/images/jenkins-builddetail.png">
 <meta property="og:image" content="https://stanleywang-github.github.io/images/harbor-secondci.png">
-<meta property="og:updated_time" content="2019-05-17T01:43:22.922Z">
+<meta property="og:updated_time" content="2019-06-04T01:55:56.026Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="实验文档2：实战交付一套dubbo微服务到kubernetes集群">
 <meta name="twitter:description" content="欢迎加入王导的VIP学习qq群：==&amp;gt;932194668&amp;lt;==   基础架构   主机名 角色 ip     HDSS7-11.host.com k8s代理节点1，zk1 10.4.7.11   HDSS7-12.host.com k8s代理节点2，zk2 10.4.7.12   HDSS7-21.host.com k8s运算节点1，zk3 10.4.7.21   HDSS7-22.">
@@ -414,7 +414,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-17 09:43:22" itemprop="dateModified" datetime="2019-05-17T09:43:22+08:00">2019-05-17</time>
+                <time title="修改时间：2019-06-04 09:55:56" itemprop="dateModified" datetime="2019-06-04T09:55:56+08:00">2019-06-04</time>
               
             
           </span>
@@ -552,13 +552,14 @@
 <p><a href="https://jenkins.io/download/" target="_blank" rel="noopener">jenkins官网</a><br><a href="https://hub.docker.com/r/jenkins/jenkins" target="_blank" rel="noopener">jenkins镜像</a></p>
 </blockquote>
 <p>在运维主机下载官网上的稳定版（这里下载2.164.1）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-200 ~]#  docker pull jenkins/jenkins:2.164.1</span><br><span class="line">2.164.1: Pulling from jenkins/jenkins</span><br><span class="line">22dbe790f715: Pull complete </span><br><span class="line">0250231711a0: Pull complete </span><br><span class="line">6fba9447437b: Pull complete </span><br><span class="line">c2b4d327b352: Pull complete </span><br><span class="line">cddb9bb0d37c: Pull complete </span><br><span class="line">b535486c968f: Pull complete </span><br><span class="line">f3e976e6210c: Pull complete </span><br><span class="line">b2c11b10291d: Pull complete </span><br><span class="line">f4c0181e1976: Pull complete </span><br><span class="line">924c8e712392: Pull complete </span><br><span class="line">d13006b7c9dd: Pull complete </span><br><span class="line">fc80aeb92627: Pull complete </span><br><span class="line">36a6e96ba1b5: Pull complete </span><br><span class="line">f50f33dc1d0a: Pull complete </span><br><span class="line">b10642432117: Pull complete </span><br><span class="line">850c260511d8: Pull complete </span><br><span class="line">47f95e65a629: Pull complete </span><br><span class="line">3b33ce546dc6: Pull complete </span><br><span class="line">051c7665e760: Pull complete </span><br><span class="line">fe379aecc538: Pull complete </span><br><span class="line">Digest: sha256:12fd14965de7274b5201653b2bffa62700c5f5f336ec75c945321e2cb70d7af0</span><br><span class="line">Status: Downloaded newer image for jenkins/jenkins:2.164.1</span><br><span class="line"></span><br><span class="line">[root@hdss7-200 ~]# docker tag 256cb12e72d6 harbor.od.com/public/jenkins:v2.164.1</span><br><span class="line">[root@hdss7-200 ~]# docker push harbor.od.com/public/jenkins:v2.164.1</span><br></pre></td></tr></table></figure></p>
-<h2 id="自定义Dockerfile"><a href="#自定义Dockerfile" class="headerlink" title="自定义Dockerfile"></a>自定义Dockerfile</h2><p>在运维主机<code>HDSS7-200.host.com</code>上编辑自定义dockerfile<br><figure class="highlight plain"><figcaption><span>/data/dockerfile/jenkins/Dockerfile</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FROM harbor.od.com/public/jenkins:v2.164.1</span><br><span class="line">USER root</span><br><span class="line">RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp;\ </span><br><span class="line">    echo &apos;Asia/Shanghai&apos; &gt;/etc/timezone</span><br><span class="line">ADD id_rsa /root/.ssh/id_rsa</span><br><span class="line">ADD config.json /root/.docker/config.json</span><br><span class="line">ADD get-docker.sh /get-docker.sh</span><br><span class="line">RUN /get-docker.sh</span><br></pre></td></tr></table></figure></p>
+<h2 id="自定义Dockerfile"><a href="#自定义Dockerfile" class="headerlink" title="自定义Dockerfile"></a>自定义Dockerfile</h2><p>在运维主机<code>HDSS7-200.host.com</code>上编辑自定义dockerfile<br><figure class="highlight plain"><figcaption><span>/data/dockerfile/jenkins/Dockerfile</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FROM harbor.od.com/public/jenkins:v2.164.1</span><br><span class="line">USER root</span><br><span class="line">RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &amp;&amp;\ </span><br><span class="line">    echo &apos;Asia/Shanghai&apos; &gt;/etc/timezone</span><br><span class="line">ADD id_rsa /root/.ssh/id_rsa</span><br><span class="line">ADD config.json /root/.docker/config.json</span><br><span class="line">ADD get-docker.sh /get-docker.sh</span><br><span class="line">RUN echo &quot;    StrictHostKeyChecking no&quot; &gt;&gt; /etc/ssh/sshd_config &amp;&amp;\</span><br><span class="line">    /get-docker.sh</span><br></pre></td></tr></table></figure></p>
 <p>这个Dockerfile里我们主要做了以下几件事</p>
 <ul>
 <li>设置容器用户为root</li>
 <li>设置容器内的时区</li>
 <li>将ssh私钥加入（使用git拉代码时要用到，配对的公钥应配置在gitlab中）</li>
 <li>加入了登录自建harbor仓库的config文件</li>
+<li>修改了ssh客户端的</li>
 <li>安装一个docker的客户端</li>
 </ul>
 <p>生成ssh密钥对：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hdss7-200 ~]# ssh-keygen -t rsa -b 2048 -C &quot;stanley.wang.m@qq.com&quot; -N &quot;&quot; -f /root/.ssh/id_rsa</span><br></pre></td></tr></table></figure></p>
@@ -1114,7 +1115,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">385k</span>
+    <span title="站点总字数">383k</span>
   
 
   
@@ -1123,7 +1124,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">5:50</span>
+    <span title="站点阅读时长">5:48</span>
   
 </div>
 
